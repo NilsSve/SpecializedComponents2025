@@ -1,0 +1,20 @@
+﻿// File Attributes.....
+
+// For use with the global VDF GetFileAttribute function....
+
+#IFNDEF FILE_ATTRIBUTE_READONLY
+Define FILE_ATTRIBUTE_READONLY            For |CI$0001
+Define FILE_ATTRIBUTE_HIDDEN              For |CI$0002
+Define FILE_ATTRIBUTE_SYSTEM              For |CI$0004
+Define FILE_ATTRIBUTE_DIRECTORY           For |CI$0010
+Define FILE_ATTRIBUTE_ARCHIVE             For |CI$0020
+Define FILE_ATTRIBUTE_NORMAL              For |CI$0080
+Define FILE_ATTRIBUTE_TEMPORARY           For |CI$0100
+Define FILE_ATTRIBUTE_SPARSE_FILE         For |CI$0200
+Define FILE_ATTRIBUTE_REPARSE_POINT       For |CI$0400
+Define FILE_ATTRIBUTE_COMPRESSED          For |CI$0800
+Define FILE_ATTRIBUTE_OFFLINE             For |CI$1000
+Define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED For |CI$2000
+Define FILE_ATTRIBUTE_ENCRYPTED           For |CI$4000
+#ENDIF
+

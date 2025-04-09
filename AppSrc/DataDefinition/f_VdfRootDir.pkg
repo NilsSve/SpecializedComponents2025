@@ -1,0 +1,25 @@
+﻿// VdfRootDir
+// ----------
+
+// store a copy of gsVdfRootDir in a global string for quick access.....
+String private_gsVDFRootDir
+
+// initialize the string from the registry setting....
+Get_Profile_String "Defaults" "VDFRootDir" to private_gsVDFRootDir
+
+// Ensure that VdfRootDir does not contain a trailing "\"....
+If (Right(private_gsVDFRootDir,1) = "\") Begin
+    Left private_gsVDFRootDir to private_gsVDFRootDir (Length(private_gsVDFRootDir)-1)
+End
+
+// now declare a global function that retrieves this value....
+
+// VdfRootDir:
+
+//Desc/ Returns the root directory where VDF is installed.
+//Desc/ e.g. 'c:\program files\vdf\'
+Function VdfRootDir Global Returns String
+    Function_Return private_gsVdfRootDir
+End_Function
+
+

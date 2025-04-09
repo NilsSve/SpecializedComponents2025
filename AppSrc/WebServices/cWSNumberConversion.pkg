@@ -1,0 +1,124 @@
+// cWSNumberConversion.pkg
+// Class:   cWSNumberConversion
+// Created: 4/15/2021 11:57:20.912 AM
+// 
+
+Use cClientWebService.pkg
+
+// 
+// Class:   cWSNumberConversion
+// 
+// Interface:
+// 
+// Function wsNumberToWords Ubigint llubiNum Returns String
+// Function wsNumberToDollars Decimal lldNum Returns String
+// 
+// 
+
+Class cWSNumberConversion is a cClientWebService
+
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psServiceLocation     to 'https://www.dataaccess.com/webservicesserver/numberconversion.wso'
+        Set psWSDLLocation        to 'https://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL'
+    End_Procedure
+
+    // 
+    // Function wsNumberToWords
+    // 
+    // Returns the word corresponding to the positive number passed as parameter.
+    // Limited to quadrillions.
+    // 
+    Function wsNumberToWords Ubigint llubiNum Returns String
+        String llNumberToWordsResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "NumberToWords"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "NumberToWordsResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsUbigint 1 1 "ubiNum" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llubiNum to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "NumberToWordsResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llNumberToWordsResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llNumberToWordsResult
+    End_Function
+
+    // 
+    // Function wsNumberToDollars
+    // 
+    // Returns the non-zero dollar amount of the passed number.
+    // 
+    Function wsNumberToDollars Decimal lldNum Returns String
+        String llNumberToDollarsResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "NumberToDollars"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "NumberToDollarsResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsDecimal 1 1 "dNum" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter lldNum to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "NumberToDollarsResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llNumberToDollarsResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llNumberToDollarsResult
+    End_Function
+
+End_Class
+

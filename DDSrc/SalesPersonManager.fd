@@ -1,0 +1,5 @@
+#REPLACE FILE5 SalesPersonManager
+#REPLACE SalesPersonManager.Recnum |FN5,0
+#REPLACE SalesPersonManager.ID |FS5,1
+#REPLACE SalesPersonManager.Name |FS5,2
+#REPLACE SalesPersonManager.ManagerSalesPersonId |FS5,3

@@ -1,0 +1,438 @@
+// cWSTextCasing.pkg
+// Class:   cWSTextCasing
+// Created: 4/15/2021 11:56:59.655 AM
+// 
+
+Use cClientWebService.pkg
+
+// 
+// Class:   cWSTextCasing
+// 
+// Interface:
+// 
+// Function wsTitleCaseWordsWithToken String llsText String llsToken Returns String
+// Function wsInvertStringCase String llsAString Returns String
+// Function wsInvertCaseFirstAdjustStringToPrevious String llsAString Returns String
+// Function wsInvertCaseFirstAdjustStringToCurrent String llsAString Returns String
+// Function wsAllUppercaseWithToken String llsAString String llsToken Returns String
+// Function wsAllLowercaseWithToken String llsAString String llsToken Returns String
+// Function wsUppercaseWordsWithToken String llsAString String llsToken Returns String
+// Function wsLowercaseWordsWithToken String llsAString String llsToken Returns String
+// 
+// 
+
+Class cWSTextCasing is a cClientWebService
+
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psServiceLocation     to 'https://www.dataaccess.com/webservicesserver/textcasing.wso'
+        Set psWSDLLocation        to 'https://www.dataaccess.com/webservicesserver/textcasing.wso?WSDL'
+    End_Procedure
+
+    // 
+    // Function wsTitleCaseWordsWithToken
+    // 
+    // 
+    Function wsTitleCaseWordsWithToken String llsText String llsToken Returns String
+        String llTitleCaseWordsWithTokenResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "TitleCaseWordsWithToken"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "TitleCaseWordsWithTokenResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sText" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsText to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsString 1 1 "sToken" "http://www.dataaccess.com/webservicesserver/" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llsToken to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "TitleCaseWordsWithTokenResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llTitleCaseWordsWithTokenResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llTitleCaseWordsWithTokenResult
+    End_Function
+
+    // 
+    // Function wsInvertStringCase
+    // 
+    // Uppercase letters that are lowercase and lowercase letters that are uppercase.
+    // 
+    Function wsInvertStringCase String llsAString Returns String
+        String llInvertStringCaseResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "InvertStringCase"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "InvertStringCaseResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "InvertStringCaseResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llInvertStringCaseResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llInvertStringCaseResult
+    End_Function
+
+    // 
+    // Function wsInvertCaseFirstAdjustStringToPrevious
+    // 
+    // Invert the casing of the first letter and adjust the string to conform with the
+    // previous casing of first letter.
+    // 
+    Function wsInvertCaseFirstAdjustStringToPrevious String llsAString Returns String
+        String llInvertCaseFirstAdjustStringToPreviousResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "InvertCaseFirstAdjustStringToPrevious"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "InvertCaseFirstAdjustStringToPreviousResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "InvertCaseFirstAdjustStringToPreviousResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llInvertCaseFirstAdjustStringToPreviousResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llInvertCaseFirstAdjustStringToPreviousResult
+    End_Function
+
+    // 
+    // Function wsInvertCaseFirstAdjustStringToCurrent
+    // 
+    // Invert the casing of the first letter and adjust the string to conform with the
+    // current casing of first letter.
+    // 
+    Function wsInvertCaseFirstAdjustStringToCurrent String llsAString Returns String
+        String llInvertCaseFirstAdjustStringToCurrentResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "InvertCaseFirstAdjustStringToCurrent"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "InvertCaseFirstAdjustStringToCurrentResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "InvertCaseFirstAdjustStringToCurrentResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llInvertCaseFirstAdjustStringToCurrentResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llInvertCaseFirstAdjustStringToCurrentResult
+    End_Function
+
+    // 
+    // Function wsAllUppercaseWithToken
+    // 
+    // Change string to uppercase adding token between characters.
+    // 
+    Function wsAllUppercaseWithToken String llsAString String llsToken Returns String
+        String llAllUppercaseWithTokenResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "AllUppercaseWithToken"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "AllUppercaseWithTokenResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsString 1 1 "sToken" "http://www.dataaccess.com/webservicesserver/" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llsToken to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "AllUppercaseWithTokenResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llAllUppercaseWithTokenResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llAllUppercaseWithTokenResult
+    End_Function
+
+    // 
+    // Function wsAllLowercaseWithToken
+    // 
+    // Change string to lowercase adding token between characters.
+    // 
+    Function wsAllLowercaseWithToken String llsAString String llsToken Returns String
+        String llAllLowercaseWithTokenResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "AllLowercaseWithToken"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "AllLowercaseWithTokenResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsString 1 1 "sToken" "http://www.dataaccess.com/webservicesserver/" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llsToken to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "AllLowercaseWithTokenResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llAllLowercaseWithTokenResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llAllLowercaseWithTokenResult
+    End_Function
+
+    // 
+    // Function wsUppercaseWordsWithToken
+    // 
+    // Change string to uppercase adding token between characters of each word.
+    // 
+    Function wsUppercaseWordsWithToken String llsAString String llsToken Returns String
+        String llUppercaseWordsWithTokenResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "UppercaseWordsWithToken"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "UppercaseWordsWithTokenResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsString 1 1 "sToken" "http://www.dataaccess.com/webservicesserver/" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llsToken to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "UppercaseWordsWithTokenResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llUppercaseWordsWithTokenResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llUppercaseWordsWithTokenResult
+    End_Function
+
+    // 
+    // Function wsLowercaseWordsWithToken
+    // 
+    // Change string to lowercase adding token between characters of each word.
+    // 
+    Function wsLowercaseWordsWithToken String llsAString String llsToken Returns String
+        String llLowercaseWordsWithTokenResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/webservicesserver/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "LowercaseWordsWithToken"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/webservicesserver/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "LowercaseWordsWithTokenResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sAString" "http://www.dataaccess.com/webservicesserver/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsAString to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsString 1 1 "sToken" "http://www.dataaccess.com/webservicesserver/" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llsToken to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "LowercaseWordsWithTokenResult" "http://www.dataaccess.com/webservicesserver/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llLowercaseWordsWithTokenResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llLowercaseWordsWithTokenResult
+    End_Function
+
+End_Class
+

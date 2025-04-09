@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>    
+    <head>
+        <title>Demo WebView2 Popup</title>
+        <style>
+            body
+            {
+                margin-left: 2em;
+                font-size: 10pt;
+                font-family: "Segoe UI";
+            }                
+            h1
+            {
+                margin-left: -0.8em;
+                color: #ffffff;
+                font-size: 1.7em;
+                background-color: #e54711;
+                font-family: "Segoe UI";
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
+                font-weight: normal;
+            } 
+            h2
+            {
+                margin-left: -0.8em;
+                border-top: 1px solid #000000;
+                padding-top: 0.4em;
+                font-size: 13pt;
+                font-family: "Segoe UI";
+                color: #e54711;
+            }                
+            h3
+            {
+                margin-left: -0.8em;
+                font-weight: bold;
+                font-size: 11pt;
+                font-family: "Segoe UI";
+            }                
+            .intro
+            {
+                margin-left: -0.8em;
+            }
+            .frmheader
+            {
+                background: #e54711;
+                padding-top: 0.1em;
+                padding-bottom: 0.2em;
+                font-size: 10pt;
+            }
+            .code
+            {
+                font-family: 'Courier New';
+                background-color: #ffeae5;
+                padding: 0.3em;
+                font-size: 10pt;
+            }
+            font.value
+            {
+
+                font: bold;
+                font-size: 10pt;
+            }
+            font.key
+            {
+
+                font: bold;
+                font-size: 10pt;
+            }
+            a {
+            color: #e54711;
+            }
+            a:hover {
+            color: #000000;
+            }
+            td
+            {
+                font-size: 9pt;
+            }
+            hr
+            {
+                margin-left: -0.8em;
+                border-top: 1px solid #000000;
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <h1>Demo WebView2 Popup</h1>
+            <p>This page demonstrates the different options for handling popups from the page offered by the <b>OnNewWindowRequested</b> event. By default they 
+                are shown in a new WebView2 window but they can also be cancelled (by setting <b>bHandled</b> to true) and a custom popup can be made by creating 
+                 new instance of the cWebView2Browser and setting that to <b>hoNewWindow</b>.</p>
+            <button onclick="window.close();">Close window</button>
+        </section>
+    </body>
+</html>

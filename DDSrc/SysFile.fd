@@ -1,0 +1,4 @@
+#REPLACE FILE4 SysFile
+#REPLACE SysFile.Recnum |FN4,0
+#REPLACE SysFile.Company_Name |FS4,1
+#REPLACE SysFile.Last_Empl_Num |FN4,2

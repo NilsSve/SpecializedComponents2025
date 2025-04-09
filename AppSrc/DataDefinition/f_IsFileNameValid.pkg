@@ -1,0 +1,20 @@
+﻿// f_IsFileNameValid.pkg
+// ---------------------
+
+Use DataDefinition\FileAttributes.pkg
+
+// Returns True if the file sFileName exists.
+Function IsFileNameValid Global String sFileName Returns Boolean
+    Integer iAttributes
+    Boolean bResult
+    
+    Move False to bResult
+    Move (GetFileAttributes(ToAnsi(sFileName))) to iAttributes
+    
+    If (iAttributes <> -1 And Not(IsFlagIn(FILE_ATTRIBUTE_DIRECTORY, iAttributes))) Begin
+        Move True to bResult
+    End
+    
+    Function_Return bResult
+End_Function
+

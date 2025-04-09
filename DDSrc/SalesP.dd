@@ -1,0 +1,56 @@
+﻿Use  Windows.pkg           // Basic Definitions
+Use  DataDict.pkg          // DataDictionary Class Definition
+Use  DDvalTbl.pkg          // Validation Table Class Definitions
+
+Open Salesp
+Open Orderhea
+
+Register_Object SalesP_sl
+
+Class SalesP_DataDictionary is A DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        Set Main_File to Salesp.File_Number
+        Set Cascade_Delete_State to FALSE
+        
+        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+        
+        Set Add_Client_File to Orderhea.File_Number
+        
+        
+        Set Field_Label_Long Field Salesp.Id to "Sales Person ID"
+        Set Field_Label_Short Field Salesp.Id to "ID"
+        Set Field_Option Field Salesp.Id DD_AUTOFIND to True
+        Set Field_Option Field Salesp.Id DD_REQUIRED to True
+        Set Field_Option Field Salesp.Id DD_CAPSLOCK to True
+        Set Field_Prompt_Object Field Salesp.Id to SalesP_sl
+        Set Key_Field_State Field Salesp.Id to TRUE
+        Set Status_Help Field Salesp.Id to "Sales person ID code - Upper case alpha"
+        
+        Set Field_Label_Long Field SalesP.Name to "Sales Person Name"
+        Set Field_Label_Short Field SalesP.Name to "Sales Person Name"
+        Set Field_Prompt_Object Field SalesP.Name to SalesP_sl
+        Set Status_Help Field SalesP.Name to "Sales person name - first and last"
+        
+        // because we have a manager alias, we will retrict deleting of any salesperson record
+        Set No_Delete_State to True
+    End_Procedure
+    
+    
+    Procedure Field_Defaults
+        Forward Send Field_Defaults
+    End_Procedure
+    
+End_Class
+#IFDEF Is$WebApp
+#ELSE
+
+Use SalesP.sl        // SalesP_sl
+
+#ENDIF
+

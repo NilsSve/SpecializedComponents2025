@@ -1,0 +1,28 @@
+﻿// f_DefaultWorkspacePath.pkg
+// --------------------------
+
+Use DataDefinition\f_VdfRootDir.pkg
+
+// DefaultOpenWorkspacePath:
+
+// Returns the default path for vdf project workspaces when opening a workspace.
+// The returned path is stripped of any trailing '\' characters.
+Function DefaultOpenWorkspacePath Global Returns String
+    String sResult
+    DWord dwResult
+    
+    // Get the last opened workspace path....
+    Get ReadString of ghoApplication "Workspaces" "LastOpenWorkspaceFolder" "" to sResult
+    
+    If (sResult = "") Begin
+        // Default to c:\DataFlex Projects....
+        Move (VdfRootDir() + "\Examples") to sResult
+    End
+    
+    // Strip any trailing "\" characters....
+    If (Right(sResult,1) = "\") Begin
+        Move (Left(sResult, Length(sResult)-1)) to sResult
+    End
+    
+    Function_Return sResult
+End_Function

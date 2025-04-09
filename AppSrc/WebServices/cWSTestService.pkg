@@ -1,0 +1,382 @@
+﻿// cWSTestService.pkg
+// Class:   cWSTestService
+// Created: 11/8/2021 10:52:19.012 AM
+// 
+
+Use cClientWebService.pkg
+
+// 
+// Class:   cWSTestService
+// 
+// Interface:
+// 
+// Function wsSayHello String llsName Returns String
+// Function wsWelcome String llsName Returns String
+// Function wsEcho String llechoString Returns String
+// Function wsAddNumber Real llnumber1 Real llnumber2 Returns Real
+// Function wsPriceQuote String llitemID Returns Decimal
+// Function wsEstimatedOrderDeliveryDate Integer llcustomerNumber Integer llorderNumber Returns Date
+// Function wsItemsSoldToDate String llitemID Returns Integer
+// 
+// 
+
+
+
+Class cWSTestService is a cClientWebService
+
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psServiceLocation     to 'http://localhost/WebOrder_25_0/TestService.wso'
+        Set psWSDLLocation        to 'http://localhost/WebOrder_25_0/TestService.wso?WSDL'
+    End_Procedure
+
+    // 
+    // Function wsSayHello
+    // 
+    // Returns a hello message using the name passed as the string.
+    // 
+    Function wsSayHello String llsName Returns String
+        String llSayHelloResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "SayHello"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "SayHelloResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sName" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsName to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "SayHelloResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llSayHelloResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llSayHelloResult
+    End_Function
+
+    // 
+    // Function wsWelcome
+    // 
+    // Returns a welcome message using the name passed as the string and IIS server
+    // variables.
+    // 
+    Function wsWelcome String llsName Returns String
+        String llWelcomeResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "Welcome"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "WelcomeResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "sName" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llsName to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "WelcomeResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llWelcomeResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llWelcomeResult
+    End_Function
+
+    // 
+    // Function wsEcho
+    // 
+    // Echoes back the string passed.
+    // 
+    Function wsEcho String llechoString Returns String
+        String llEchoResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "Echo"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "EchoResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "echoString" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llechoString to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsString 1 1 "EchoResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llEchoResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llEchoResult
+    End_Function
+
+    // 
+    // Function wsAddNumber
+    // 
+    // Adds two numbers and returns the result.
+    // 
+    Function wsAddNumber Real llnumber1 Real llnumber2 Returns Real
+        Real llAddNumberResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "AddNumber"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "AddNumberResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsReal 1 1 "number1" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llnumber1 to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsReal 1 1 "number2" "http://www.dataaccess.com/examples/testservice" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llnumber2 to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsReal 1 1 "AddNumberResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llAddNumberResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llAddNumberResult
+    End_Function
+
+    // 
+    // Function wsPriceQuote
+    // 
+    // Looks up the price of a particular inventory item. Example item identifiers,
+    // DT, GOLD, MAPS, OBM, RUNMTR.
+    // 
+    Function wsPriceQuote String llitemID Returns Decimal
+        Decimal llPriceQuoteResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "PriceQuote"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "PriceQuoteResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "itemID" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llitemID to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsDecimal 1 1 "PriceQuoteResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llPriceQuoteResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llPriceQuoteResult
+    End_Function
+
+    // 
+    // Function wsEstimatedOrderDeliveryDate
+    // 
+    // Looks up an order and returns the delivery date. Example: customer number 1 and
+    // order number 101.
+    // 
+    Function wsEstimatedOrderDeliveryDate Integer llcustomerNumber Integer llorderNumber Returns Date
+        Date llEstimatedOrderDeliveryDateResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "EstimatedOrderDeliveryDate"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "EstimatedOrderDeliveryDateResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsInteger 1 1 "customerNumber" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llcustomerNumber to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineParameter xsInteger 1 1 "orderNumber" "http://www.dataaccess.com/examples/testservice" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llorderNumber to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsDate 1 1 "EstimatedOrderDeliveryDateResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llEstimatedOrderDeliveryDateResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llEstimatedOrderDeliveryDateResult
+    End_Function
+
+    // 
+    // Function wsItemsSoldToDate
+    // 
+    // Calculates the total number of items sold. Example: item identifiers, DT, GOLD,
+    // MAPS, OBM, RUNMTR.
+    // 
+    Function wsItemsSoldToDate String llitemID Returns Integer
+        Integer llItemsSoldToDateResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://www.dataaccess.com/examples/testservice"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "ItemsSoldToDate"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://www.dataaccess.com/examples/testservice"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "ItemsSoldToDateResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsString 1 1 "itemID" "http://www.dataaccess.com/examples/testservice" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llitemID to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsInteger 1 1 "ItemsSoldToDateResult" "http://www.dataaccess.com/examples/testservice" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llItemsSoldToDateResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llItemsSoldToDateResult
+    End_Function
+
+End_Class
+

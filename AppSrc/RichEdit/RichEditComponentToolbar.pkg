@@ -1,0 +1,347 @@
+﻿// RichEditComponentToolbar.pkg
+// Dennis Piccioni 11/18/2004
+// RichEdit Toolbar that can be placed inside a component (e.g. dbView) via a Use statement
+
+Use cToolbar.Pkg
+Use cImageList.Pkg
+Use Dftypes.pkg
+
+Register_Object oRichEditToolBar
+Register_Object oNumbering
+
+// these procedures are defined in the RichEdit control that will use this toolbar
+Register_Procedure ToggleNumbering
+Register_Procedure DoIndent
+Register_Procedure DoOutdent
+Register_Procedure AlignLeft
+Register_Procedure AlignCenter
+Register_Procedure AlignRight
+Register_Procedure ToggleBullets
+Register_Procedure DoNewDocument
+Register_Procedure DoOpenDocument
+Register_Procedure DoSaveDocument
+Register_Procedure DoFind
+Register_Procedure DoFindReplace
+
+// dropdown menu for Numbering options
+Object oNumberingMenu is a DFBaseEditPullDown
+    Send Delete_Data
+    
+    // drop down menu methods for oNumbering
+    Procedure OnNumbersNone
+        handle hoFocus
+        get Focus of Desktop to hoFocus
+        Send DoNumbering of hoFocus buNone
+    End_Procedure
+    
+    Procedure OnNumbersArabicNumbers
+        handle hoFocus
+        get Focus of Desktop to hoFocus
+        Send DoNumbering of hoFocus buArabicNumbers
+    End_Procedure
+    
+    Procedure OnNumbersLowerLetters
+        handle hoFocus
+        get Focus of Desktop to hoFocus
+        Send DoNumbering of hoFocus buLowerLetters
+    End_Procedure
+    
+    Procedure OnNumbersUpperLetters
+        handle hoFocus
+        get Focus of Desktop to hoFocus
+        Send DoNumbering of hoFocus buUpperLetters
+    End_Procedure
+    
+    Procedure OnNumbersLowerRomans
+        handle hoFocus
+        get Focus of Desktop to hoFocus
+        Send DoNumbering of hoFocus buLowerRomans
+    End_Procedure
+    
+    Procedure OnNumbersUpperRomans
+        handle hoFocus
+        get Focus of Desktop to hoFocus
+        Send DoNumbering of hoFocus buUpperRomans
+    End_Procedure
+    
+    // drop down menu items for oNumbering
+    Send Add_Item msg_OnNumbersNone "None"
+    Set Aux_Value 0 To self
+    Send Add_Item msg_OnNumbersArabicNumbers "Arabic Numbers"
+    Set Aux_Value 1 To self
+    Send Add_Item msg_OnNumbersLowerLetters "Lowercase Letters"
+    Set Aux_Value 2 To self
+    Send Add_Item msg_OnNumbersUpperLetters "Uppercase Letters"
+    Set Aux_Value 3 To self
+    Send Add_Item msg_OnNumbersLowerRomans "Lowercase Roman Numerals"
+    Set Aux_Value 4 To self
+    Send Add_Item msg_OnNumbersUpperRomans "Uppercase Roman Numerals"
+    Set Aux_Value 5 To self
+    
+    Procedure DoPopup
+        // Problem: need to display the menu underneath the button
+        Integer iVoid iLeft iTop iBottom iButtonCount
+        
+        String sRect
+        Pointer lpsRect
+        ZeroType tRect To sRect
+        GetAddress of sRect To lpsRect
+        
+        // iButtonCount needs to contain the number (0-based) of the button under which this menu should appear,
+        // which should be the same as the piImage used, if the imagelist is set up in button order
+        get piImage of (oNumbering(oRichEditToolBar)) to iButtonCount
+        // adjust iButtonCount by the number of spacer buttons before this button (one in this case)
+        increment iButtonCount
+        
+        Send Windows_Message of oRichEditToolBar TB_GETITEMRECT iButtonCount lpsRect // get bounding rectangle of the button
+        
+        GetBuff from sRect at tRect.Bottom To iBottom
+        Put iBottom To sRect at tRect.Top
+        
+        Move (ClientToScreen(window_handle(oRichEditToolBar), lpsRect)) To iVoid // convert Client to Screen coordinates
+        
+        GetBuff from sRect at tRect.left To iLeft
+        GetBuff from sRect at tRect.top To iTop
+        
+        Set GuiLocation To iTop iLeft
+        Send Popup
+    End_Procedure
+    
+End_Object
+
+// toolbar to be placed inside component
+Object oRichEditToolBar is a cToolBar
+    // set this to False, since this toolbar will be Use'd inside a view
+    set pbInMdiPanel to False
+    
+    Object oImages is a cImageList
+        Set piMaxImages To 20
+        
+        Procedure OnCreate
+            Integer iVoid
+            Get AddTransparentImage "New16.bmp"         clFuchsia To iVoid // 0
+            Get AddTransparentImage "Open16.bmp"        clFuchsia To iVoid // 1
+            Get AddTransparentImage "Save16.bmp"        clFuchsia To iVoid // 2
+            Get AddTransparentImage "Bold16.bmp"        clFuchsia To iVoid // 3
+            Get AddTransparentImage "Italics16.bmp"     clFuchsia To iVoid // 4
+            Get AddTransparentImage "Underline16.bmp"   clFuchsia To iVoid // 5
+            Get AddTransparentImage "AlignLeft16.bmp"   clFuchsia To iVoid // 6
+            Get AddTransparentImage "AlignCenter16.bmp" clFuchsia To iVoid // 7
+            Get AddTransparentImage "AlignRight16.bmp"  clFuchsia To iVoid // 8
+            Get AddTransparentImage "Numbering16.bmp"   clFuchsia To iVoid // 9
+            Get AddTransparentImage "Bullets16.bmp"     clFuchsia To iVoid // 10
+            Get AddTransparentImage "Indent16.bmp"      clFuchsia To iVoid // 11
+            Get AddTransparentImage "Outdent16.bmp"     clFuchsia To iVoid // 12
+            Get AddTransparentImage "Cut16.bmp"         clFuchsia To iVoid // 13
+            Get AddTransparentImage "Copy16.bmp"        clFuchsia To iVoid // 14
+            Get AddTransparentImage "Paste16.bmp"       clFuchsia To iVoid // 15
+            Get AddTransparentImage "Undo16.bmp"        clFuchsia To iVoid // 16
+            Get AddTransparentImage "Redo16.bmp"        clFuchsia To iVoid // 17
+            Get AddTransparentImage "Prompt16.bmp"      clFuchsia To iVoid // 18
+            Get AddTransparentImage "FindReplace16.bmp" clFuchsia To iVoid // 19
+        End_Procedure
+    End_Object
+    
+    Set phoImageList To oImages
+    
+    Object oNew is a cToolbarButton
+        Set psTooltip To 'New Blank Document (Ctrl+N)'
+        Set psStatusHelp To 'Creates a new blank document (clears control)'
+        Set piImage To 0
+        Procedure OnClick
+            send DoSendToDeoFocus msg_DoNewDocument
+        End_Procedure
+    End_Object
+    
+    Object oOpen is a cToolbarButton
+        Set psTooltip To 'Open (Ctrl+O)'
+        Set psStatusHelp To 'Opens a document'
+        Set piImage To 1
+        Procedure OnClick
+            send DoSendToDeoFocus msg_DoOpenDocument
+        End_Procedure
+    End_Object
+    
+    Object oSave is a cToolbarButton
+        Set psTooltip To 'Save (Ctrl+S)'
+        Set psStatusHelp To 'Saves current document'
+        Set piImage To 2
+        Procedure OnClick
+            send DoSendToDeoFocus msg_DoSaveDocument
+        End_Procedure
+    End_Object
+    
+    Object oBold is a cToolbarButton
+        Set psTooltip To 'Bold (Ctrl+B)'
+        Set psStatusHelp To 'Toggles selected text between bold and normal font'
+        Set piImage To 3
+        Procedure OnClick
+            send DoSendToDeoFocus msg_ToggleBold
+        End_Procedure
+    End_Object
+    
+    Object oItalics is a cToolbarButton
+        Set psTooltip To 'Italics (Ctrl+I)'
+        Set psStatusHelp To 'Toggles selected text between italic and normal font'
+        Set piImage To 4
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_ToggleItalics
+        End_Procedure
+    End_Object
+    
+    Object oUnderline is a cToolbarButton
+        Set psTooltip To 'Underline (Ctrl+U)'
+        Set psStatusHelp To 'Toggles selected text between underlined and normal font'
+        Set piImage To 5
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_ToggleUnderline
+        End_Procedure
+    End_Object
+    
+    Object oSeparator is a cToolbarButton
+        Set peStyle To bsSeparator
+    End_Object
+    
+    Object oAlignLeft is a cToolbarButton
+        Set psTooltip To 'Align Left'
+        Set psStatusHelp To 'Left-aligns selected text'
+        Set piImage To 6
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_AlignLeft
+        End_Procedure
+    End_Object
+    
+    Object oAlignCenter is a cToolbarButton
+        Set psTooltip To 'Center'
+        Set psStatusHelp To 'Centers selected text'
+        Set piImage To 7
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_AlignCenter
+        End_Procedure
+    End_Object
+    
+    Object oAlignRight is a cToolbarButton
+        Set psTooltip To 'Align right'
+        Set psStatusHelp To 'Right-aligns selected text'
+        Set piImage To 8
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_AlignRight
+        End_Procedure
+    End_Object
+    
+    Object oNumbering is a cToolbarButton
+        Set peStyle To bsDropDown
+        Set psLabel To 'Numbering'
+        Set pbAutoSize To True
+        Set psTooltip To 'Numbering'
+        Set psStatusHelp To 'Applies numbering to selected text'
+        Set piImage To 9
+        
+        Procedure OnClick
+            // the button (not drop-down arrow) has been clicked
+            Send DoSendToDeoFocus msg_ToggleNumbering
+        End_Procedure
+        
+        Procedure OnDropDown
+            // the drop-down arrow has been clicked
+            Send DoPopup of oNumberingMenu
+        End_Procedure
+        
+    End_Object
+    
+    Object oBullets is a cToolbarButton
+        Set psTooltip To 'Bullets'
+        Set psStatusHelp To 'Applies bullets to selected text'
+        Set piImage To 10
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_ToggleBullets
+        End_Procedure
+    End_Object
+    
+    Object oOutdent is a cToolbarButton
+        Set psTooltip To 'Decrease Indent'
+        Set psStatusHelp To 'Decreases indentation of selected text'
+        Set piImage To 11
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_DoOutdent
+        End_Procedure
+    End_Object
+    
+    Object oIndent is a cToolbarButton
+        Set psTooltip To 'Increase Indent'
+        Set psStatusHelp To 'Increases indentation of selected text'
+        Set piImage To 12
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_DoIndent
+        End_Procedure
+    End_Object
+    
+    Object oSeparator is a cToolbarButton
+        Set peStyle To bsSeparator
+    End_Object
+    
+    Object oCut is a cToolbarButton
+        Set psTooltip To 'Cut (Ctrl+X)'
+        Set psStatusHelp To 'Cuts the selection and puts it on the Clipboard (Ctrl+X)'
+        Set piImage To 13
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_cut
+        End_Procedure
+    End_Object
+    
+    Object oCopy is a cToolbarButton
+        Set psTooltip To 'Copy (Ctrl+C)'
+        Set psStatusHelp To 'Copies the selection and puts it on the Clipboard (Ctrl+C)'
+        Set piImage To 14
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_copy
+        End_Procedure
+    End_Object
+    
+    Object oPaste is a cToolbarButton
+        Set psTooltip To 'Paste (Ctrl+V)'
+        Set psStatusHelp To 'Inserts Clipboard contents (Ctrl+V)'
+        Set piImage To 15
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_paste
+        End_Procedure
+    End_Object
+    
+    Object oUndo is a cToolbarButton
+        Set psTooltip To 'Undo Typing (Ctrl+Z)'
+        Set psStatusHelp To 'Undoes typing operation(s)'
+        Set piImage To 16
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_Undo
+        End_Procedure
+    End_Object
+    
+    Object oRedo is a cToolbarButton
+        Set psTooltip To 'Redo Typing (Ctrl+Y)'
+        Set psStatusHelp To 'Redoes typing operation(s)'
+        Set piImage To 17
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_Redo
+        End_Procedure
+    End_Object
+    
+    Object oFind is a cToolbarButton
+        Set psTooltip To 'Find Text (Ctrl+F)'
+        Set psStatusHelp To 'Find text in control'
+        Set piImage To 18
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_DoFind
+        End_Procedure
+    End_Object
+    
+    Object oFindReplace is a cToolbarButton
+        Set psTooltip To 'Find && Replace Text (Ctrl+H)'
+        Set psStatusHelp To 'Find and replace text in control'
+        Set piImage To 19
+        Procedure OnClick
+            Send DoSendToDeoFocus msg_DoFindReplace
+        End_Procedure
+    End_Object
+    
+End_Object
+

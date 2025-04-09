@@ -1,0 +1,1229 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>Tech White Papers 14</title>
+</head>
+
+<body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" bgcolor="#FFFFFF"
+background="../images/downbar.gif">
+<div align="left">
+
+<table border="0" cellpadding="0" cellspacing="0" width="600" align="left">
+  <tr>
+    <td width="483" valign="top" align="center"><table border="0" cellpadding="0"
+    cellspacing="0" width="395">
+      <tr>
+        <td width="395" valign="top" align="center"><table border="0" cellpadding="0"
+        cellspacing="0" width="395">
+          <tr>
+            <td width="44"><font face="Times New Roman"><br>
+            </font></td>
+            <td width="395"><p align="center"><a name="Compload"></a><font face="Times New Roman"><strong>Data
+            Definition in <br>
+            </strong><img src="VDFlogo.gif" alt="VisualDataFlex" width="126" height="25"></font><br>
+            Version 5.x</p>
+            <hr>
+            <h2 align="center"><font face="Times New Roman"><small>A White Paper</small></font></h2>
+            <p align="center"><font SIZE="2">© Data Access Nederland, December 1998.</font><font
+            face="Times New Roman"><small><br>
+            Publication date: December 17, 1998 </small></font></p>
+            <hr>
+            <h3><a name="Contents"><font face="Times New Roman">Contents</font></a></h3>
+            <ul>
+              <li><a href="#Introduction"><font face="Times New Roman">Introduction</font></a></li>
+              <li><a href="#Database Drivers"><font face="Times New Roman">Database Drivers</font></a></li>
+              <li><a href="#The Filelist"><font face="Times New Roman">The Filelist</font></a></li>
+              <li><a href="#Data Definition"><font face="Times New Roman">Data Definition</font></a></li>
+              <li><a href="#Resizing and Re-indexing - Data Integrity"><font face="Times New Roman">Resizing
+                and Re-indexing - Data Integrity</font></a></li>
+              <li><a href="#Converting an Installed Database"><font face="Times New Roman">Converting an
+                Installed Database</font></a></li>
+              <li><a href="#Converting Data to a non-DataFlex Format"><font face="Times New Roman">Converting
+                Data to a non-DataFlex Format</font></a></li>
+              <li><a href="#Tips &amp; Tricks"><font face="Times New Roman">Tips &amp; Tricks</font></a></li>
+            </ul>
+            <b><h3><a name="Introduction"><font face="Times New Roman" size="4">Introduction</font></a></h3>
+            </b><font SIZE="2"><p>This document describes the commands you can use to define DataFlex
+            tables. Commands to define tables, columns and indexes have been part of DataFlex since
+            version 3.1. A sample application for the use of these commands is delivered as part of
+            every VDF license in the form of Database Builder, which is written in DataFlex
+            (VDF).</p>
+            <p>On public forums questions regarding data definition keep turning up. The main
+            impression that one gets when reading these messages is that it is a complex matter, it
+            usually turns out it isn&#146;t. The data definition capabilities of the DataFlex
+            programming language are unknown. Once developers are introduced to this interesting
+            subset of the language, they usually can implement the desired functionality with relative
+            ease. The main reason for writing this document is to show how easy it is to write your
+            own data definition program to suit your needs.</p>
+            <p>The data definition commands of DataFlex serve two main purposes:</p>
+            <p>Maintenance of an installed application&#146;s database.</p>
+            <p>Conversion logic when installing a new version of an application. Typically, this will
+            add fields and indexes to tables. </p>
+            <p>This document will discuss data definition in detail. There is also attention for
+            non-DataFlex databases supported through database drivers. Sample code will be given in
+            the document to illustrate commands.</p>
+            <p>Some of the sample code in this document is supplied in a sample application, called
+            &quot;Definition Sample&quot; (<i><b>datadef.vd5).</b></i> The relevant parts of the
+            sample application are highlighted and explained. The application offers the option to
+            select a workspace.<br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a NAME="Database Drivers"><font face="Times New Roman" size="4">Database Drivers</font></a></p>
+            </b><font SIZE="2"><p>Shortly after the introduction of VDF, the first Data Access
+            Database API drivers also became available. These drivers allow DataFlex programs to
+            access non-DataFlex data in the same way they access DataFlex data. There are currently
+            drivers available from both Data Access and third party developers. The number of
+            supported databases will grow in the future, as Data Access is actively pursuing
+            connectivity with the Data Access Connectivity Team. The connectivity offered by drivers
+            is not restricted to VDF alone. Versions are available for DataFlex 3.1c or higher on both
+            console mode and UNIX environments. Currently the following drivers are available:</font></p>
+            <div align="center"><center><table BORDER="1" CELLSPACING="1" BORDERCOLOR="#7f7f7f"
+            CELLPADDING="4" WIDTH="462">
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Data
+                format</b></font></td>
+                <td WIDTH="35%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Developed
+                by</b></font></td>
+                <td WIDTH="37%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Re-structure
+                functionality?</b></font></td>
+              </tr>
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP"><font SIZE="2">DataFlex</font></td>
+                <td WIDTH="35%" VALIGN="TOP"><font SIZE="2">Data Access Corporation</font></td>
+                <td WIDTH="37%" VALIGN="TOP"><font SIZE="2">Yes</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP"><font SIZE="2">DB2</font></td>
+                <td WIDTH="35%" VALIGN="TOP"><font SIZE="2">Data Access Corporation</font></td>
+                <td WIDTH="37%" VALIGN="TOP"><font SIZE="2">Yes</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP"><font SIZE="2">ODBC</font></td>
+                <td WIDTH="35%" VALIGN="TOP"><font SIZE="2">Data Access Corporation</font></td>
+                <td WIDTH="37%" VALIGN="TOP"><font SIZE="2">Yes</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP"><font SIZE="2">Oracle</font></td>
+                <td WIDTH="35%" VALIGN="TOP"><font SIZE="2">Mertech Data Systems, Inc</font></td>
+                <td WIDTH="37%" VALIGN="TOP"><font SIZE="2">No</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP"><font SIZE="2">Pervasive 70, Btrieve</font></td>
+                <td WIDTH="35%" VALIGN="TOP"><font SIZE="2">Data Access Corporation</font></td>
+                <td WIDTH="37%" VALIGN="TOP"><font SIZE="2">Yes</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="28%" VALIGN="TOP"><font SIZE="2">SQL Server</font></td>
+                <td WIDTH="35%" VALIGN="TOP"><font SIZE="2">Mertech Data Systems, Inc</font></td>
+                <td WIDTH="37%" VALIGN="TOP"><font SIZE="2">No</font></td>
+              </tr>
+            </table>
+            </center></div><i><b><p><font face="Times New Roman" size="3"><a NAME="Traditional">The
+            Traditional Way of Connectivity</a></font></p>
+            </b></i><font SIZE="2"><p>In versions prior to DataFlex 3.1, connectivity to other
+            database formats is offered. The most popular of those solutions is &quot;DataFlex for
+            Btrieve&quot;. The &quot;DataFlex for Btrieve&quot; product supports DataFlex 2.3b to
+            DataFlex 3.1c versions. In The Netherlands, Data Access developed &quot;DataFlex voor
+            Exact&quot; (for DataFlex 3.01b) to access a database format used by a popular Dutch
+            accounting program. The big difference between the driver solution and the traditional one
+            is the technique. The traditional solution is a so-called &quot;modified runtime&quot;.
+            This in effect, is a runtime that was changed by the connectivity provider to add a
+            database format. It is a hard linked solution, which can be a disadvantage. To support a
+            new DataFlex version one would have to have a CS&amp;L (C Source and Library) version of
+            the new runtime and re-create the modified runtime. The CS&amp;L typically lagged behind
+            in release date several months, which is one of the reasons for the hard-linked solutions
+            to also lag behind in release schedule.</p>
+            <p>The drivers on the other hand, use a technique known as dynamic linking. This allows
+            the driver to be a separate dynamically loadable module, which is not part of the runtime
+            at all. Should the runtime change when Data Access releases a new DataFlex version, the
+            same driver can be used in that new version. The effectiveness of this technique has
+            already been proven by the release of DataFlex 3.1d and VDF5 which were able to use the
+            same drivers as their predecessors (3.1c and VDF 4.0c). </font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334335">Drivers and Data
+            Definition</a></font></p>
+            </b></i><font SIZE="2"><p>Some drivers support the data definition commands of DataFlex,
+            others do not. Drivers developed by Data Access typically support this functionality;
+            others do not (as of yet). The functionality used to define data is known as re-structure
+            functionality. If the driver documentation states that it offers re-structure
+            functionality, you can use the commands described in this document on tables accessed
+            through that driver. If the driver does not support this functionality, you cannot use
+            these commands.</p>
+            <p>Since Database Builder is a VDF program it uses the same commands as described in this
+            document to implement its data definition functionality. This means you can use Database
+            Builder to change the definition of tables in formats that support re-structure
+            functionality. In the Btrieve environment for example, Database Builder is one of the few
+            tools that allows you to change table definitions and keep all data in the table intact.</p>
+            <p>Although you cannot use Database Builder to re-define tables through a driver that does
+            not support re-structure functionality, you can use it to define the data dictionaries of
+            those tables. Data dictionaries are part of the program and not the data definition. <br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a name="The Filelist"><font face="Times New Roman" size="4">The Filelist</font></a></p>
+            </b><font SIZE="2"><p>The Filelist is used by DataFlex to identify tables in a program. It
+            combines a file number with a physical table. This table may be a disk file (DataFlex,
+            Btrieve) or a table in a database server (ODBC, DB2, Oracle or SQL Server) The Filelist
+            can hold 255 entries, each of which has three attributes:</p>
+            <p>Rootname, The root name of the table. This is a physical disk name or an identifier
+            string for a database driver.</p>
+            <p>Display name. A user-friendly name.</p>
+            <p>Logical Name. The name used when accessing the table in DataFlex source code.</p>
+            <p>Data Access reserves the numbers above 250 for its own use, leaving 250 effective
+            entries in a Filelist. Although this may seem sufficient, when building bigger, business
+            applications this becomes a limitation. This limitation can be worked around by using more
+            than one Filelist or combining multiple tables into one bigger table (CodeMast and
+            CodeType are a typical example of the combination technique).</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334337">Why the Filelist is
+            Essential</a></font></p>
+            </b></i><font SIZE="2"><p>The Filelist is an essential part of the DataFlex database. It
+            is the base element used when locking tables for a save operation. When a DataFlex program
+            issues a lock, all open tables of the program that are not read-only, will be locked by
+            their assigned number in the Filelist. This simple but effective lock strategy ensures
+            deadlock cannot occur. When using non-DataFlex databases it is possible for deadlock to
+            occur. DataFlex locks are always complete table locks, in other environments record
+            locking may be supported. It is a well know fact that when the size of the element to lock
+            gets smaller (Table, Page, Record) the chances of deadlock increase. If you are in a
+            situation where record locking is supported you need to ensure deadlock is detected and
+            handled properly by your application. One option would be to switch record locking off.
+            Another is to retry the transaction until there is no more deadlock.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334338">Using Multiple
+            Filelists</a></font></p>
+            </b></i><font SIZE="2"><p>When using multiple Filelists, there usually is a big complex
+            application involved. Such an application is often divided into multiple programs. Persons
+            using one program do not need functionality from the other. There usually is some common
+            set of tables that is used by all programs in the application. This set should be present
+            in every Filelist used by the programs of the application.</p>
+            <p>Since the Filelist is the main reason you cannot get into a deadlock situation in a
+            DataFlex environment, you have to consider if this is still true when using multiple
+            Filelists. In general, when using the same physical tables in more than one Filelist the
+            tables must be in the same order in all the Filelists. The numbers do not need to be the
+            same but they must be in the same order. Usually, the numbers of tables are kept the same
+            throughout all Filelists, which is most logical and easy to do.</p>
+            <p>The use of the multiple Filelists is achieved by setting up the proper environment for
+            each application. Simply create a workspace for each Filelist. Suppose we have the need
+            for multiple Filelists in an application that manipulates Accounting and Shipping data.
+            You would need more than 250 Filelist entries for the tables in use. The common set of
+            tables is filled with address data. We could setup a disk directory structure that looks
+            like the following:</p>
+            <blockquote>
+              <p>\CA</p>
+              <blockquote>
+                <p>\Accounting<br>
+                \Shipping<br>
+                \Address</p>
+              </blockquote>
+            </blockquote>
+            <p>Each sub directory mentioned above (Accounting, Shipping and Address) has a standard
+            workspace structure underneath it. You would need to create three workspaces to make this
+            all work. The workspaces will be named the same as the directories and will contain
+            multiple directory entries for DataPath, DDSrcPath and AppSrcPath. The settings would be
+            as follows - assuming this is all in the root directory.</p>
+            </font><div align="center"><center><table BORDER="1" CELLSPACING="1" BORDERCOLOR="#7f7f7f"
+            CELLPADDING="4" WIDTH="463">
+              <tr>
+                <td WIDTH="17%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Workspace</b></font></td>
+                <td WIDTH="83%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Settings</b></font></td>
+              </tr>
+              <tr>
+                <td WIDTH="17%" VALIGN="TOP"><font SIZE="2">Address</font></td>
+                <td WIDTH="83%" VALIGN="TOP"><font SIZE="2">DataPath <a href="file:///c:/CA/Address/Data">c:\CA\Address\Data</a><br>
+                DDSrcPath <a href="file:///c:/CA/Address/DDSrc">c:\CA\Address\DDSrc</a><br>
+                AppSrcPath c:\CA\Address\AppSrc</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="17%" VALIGN="TOP"><font SIZE="2">Accounting</font></td>
+                <td WIDTH="83%" VALIGN="TOP"><font SIZE="2">DataPath <a
+                href="file:///c:/CA/Accounting/Data;c:/CA/Address/Data">c:\CA\Accounting\Data;c:\CA\Address\Data</a><br>
+                DDSrcPath c:\CA\Accounting \DDSrc;c:\CA\Address\DDSrc<br>
+                AppSrcPath c:\CA\Accounting \AppSrc;c:\CA\Address\AppSrc</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="17%" VALIGN="TOP"><font SIZE="2">Shipping</font></td>
+                <td WIDTH="83%" VALIGN="TOP"><font SIZE="2">DataPath <a
+                href="file:///c:/CA/Shipping/Data;c:/CA/Address/Data">c:\CA\Shipping\Data;c:\CA\Address\Data</a><br>
+                DDSrcPath <a href="file:///c:/CA/Shipping/DDSrc;c:/CA/Address/DDSrc">c:\CA\Shipping\DDSrc;c:\CA\Address\DDSrc</a><br>
+                AppSrcPath c:\CA\Shipping\AppSrc;c:\CA\Address\AppSrc</font></td>
+              </tr>
+            </table>
+            </center></div><font SIZE="2"><p>Each workspace needs to have its own Filelist. The tables
+            defined in workspace Address also needs to be defined in the Filelists of the other
+            workspaces. Suppose the table customer is set to file number 11 in the Address workspace.
+            You need to define the same entry in the Fielists of Accounting and Shipping. We do not
+            need to define a new table, just the Filelist entry. The workspace setup will ensure that
+            the table is found when a program in the Accounting or Shipping workspace tries to open
+            it. To add an entry for an existing table, use the new entry option in the Filelist menu
+            of Database Builder. It would look like the following screen:</p>
+            <p><img src="Data_D1.gif" alt="wpe66.gif (6265 bytes)"> </p>
+            <p>You should switch the &quot;Create FD&quot; option off since the FD of the file is
+            already created in the Address workspace and will be found by the compiler through the
+            workspace setup.</p>
+            <p>If you create multiple directory workspaces, be warned that the IDE will not allow you
+            to edit any component, which is not in the first AppSrc directory. However, you can use
+            these components in your program. </p>
+            <p>The workspace settings above can be entered directly in the registry editor or by using
+            the workspace manager from either IDE or Database Builder. The Workspace Manager can be
+            started by choosing the &quot;modify workspace&quot; menu option in the Workspace menu.
+            When you want to share bitmaps, helps files or programs, you should also adjust the
+            settings for those workspace paths.</p>
+            <p>When installing the application in the &quot;deploy environment&quot;, do not forget to
+            copy all workspaces involved. The scenario just described, can of course be expanded to
+            more complex situations. The principle stays the same.<br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a name="Data Definition"><font face="Times New Roman" size="4">Data Definition</font></a></p>
+            </b><font SIZE="2"><p>Within the VDF programming language a number of data definitions
+            commands have been defined. The commands are described in detail in the VDF help and we do
+            not want to repeat that information. Instead we want to focus on how to use the commands.
+            The data definition commands are as follows:</font></p>
+            <table BORDER="1" CELLSPACING="1" BORDERCOLOR="#7f7f7f" CELLPADDING="4" WIDTH="445">
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Command</b></font></td>
+                <td WIDTH="77%" VALIGN="TOP" BGCOLOR="#000000"><font SIZE="2" COLOR="#ffffff"><b>Short
+                description</b></font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Create_field</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Create a field</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Create_index</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Create an index </font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Delete_field</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Delete a field</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Delete_index</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Delete an index</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Get_attribute</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Get an attribute on global, table, field,
+                index or segment level</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Load_def</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Load a DEF file</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Load_driver</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Load a database driver</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Output_aux_file</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Output an auxiliary file (FD or DEF)</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Set_attribute</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Set an attribute on global, table, field,
+                index or segment level</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Sort</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Re-index</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Structure_abort</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Abort changes to a table definition</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Structure_copy </font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Copy a table definition</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Structure_end</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">End a table definition make changes permanent</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Structure_start</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Start a table definition</font></td>
+              </tr>
+              <tr>
+                <td WIDTH="23%" VALIGN="TOP"><font SIZE="2">Unload_driver</font></td>
+                <td WIDTH="77%" VALIGN="TOP"><font SIZE="2">Unload a database driver</font></td>
+              </tr>
+            </table>
+            <font SIZE="2"><p>Creating or changing a table definition can best be compared with a
+            database transaction. In a database transaction there are three major decision points,
+            Begin_Transaction, End_Transaction and Abort_Tranaction. Likewise there are three major
+            decision points when (re)defining data definitions, Structure_start, Structure_End and
+            Structure_Abort.</p>
+            <p>The commands are explained in detail in the DataFlex documentation. We will give
+            some examples of the commands in the remaining part of the document.<br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a name="Resizing and Re-indexing - Data Integrity"><font face="Times New Roman"
+            size="4">Resizing and Re-indexing - Data Integrity</font></a></p>
+            <i><p><font face="Times New Roman" size="3"><a NAME="_Toc440334341">Resize - a Simple
+            Sample</a></font></p>
+            </i></b><font SIZE="2"><p>Let&#146;s look at our first sample - the ResizeFiles procedure.
+            This procedure opens all tables in a Filelist to verify the number of records used in that
+            table. In addition, it multiplies by a certain factor to ensure that it is greater, than
+            the maximum number of records in the table. If that is the case, the maximum number of
+            records will be increased by the same factor. DataFlex developers, all over the world, use
+            functionality like this to ensure the data tables indexes do not fill up. This avoids the
+            &quot;index file full&quot; error. Please note that this functionality is typical for
+            DataFlex tables. Other databases may not even support a concept as maximum number of
+            records, indexes or may be unable to return the number of records currently in the table.</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Procedure ResizeFiles Number
+              ResizeFactor<br>
+              &nbsp;&nbsp; String RootName<br>
+      &nbsp;&nbsp;
+              Integer FileNum<br>
+      &nbsp;&nbsp;
+              Integer FileisOpen<br>
+      &nbsp;&nbsp;
+              Integer MaxRec<br>
+      &nbsp;&nbsp;
+              Integer Numrec<br>
+      &nbsp;&nbsp;
+              Integer StructHandle</p>
+              <p>&nbsp;&nbsp; //*** Initialize the file number.<br>
+              &nbsp;&nbsp; //&nbsp;&nbsp;&nbsp; We will start searching the Filelist<br>
+              &nbsp;&nbsp;
+              //*** starting at this number<br>
+              &nbsp;&nbsp;
+              Move 0 To FileNum<br>
+              &nbsp;&nbsp;
+              Repeat<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Get next used file number<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FILE_NEXT_USED Of FileNum To FileNum</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If FileNum Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Skip Flexerrs<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FILE_ROOT_NAME Of FileNum To RootName<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (Uppercase(Trim(RootName))&lt;&gt; = &quot;FLEXERRS&quot;) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Open the file exclusively,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp;&nbsp;&nbsp;
+            we may want to change it later.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Open FileNum Mode DF_EXCLUSIVE<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Found] Move 1 To FileIsOpen<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [~Found] Move 0 To FileIsOpen<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If FileIsOpen Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FILE_MAX_RECORDS
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Of FileNum To MaxRec<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FILE_RECORDS_USED
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Of FileNum To NumRec<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Check factor<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            ((MaxRec &gt; 1) And (NumRec &gt; 1) And ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ((NumRec *
+            ResizeFactor) &gt; Maxrec))) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move FileNum To StructHandle<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_Start StructHandle<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FILE_MAX_RECORDS
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Of StructHandle ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To
+            (Integer(ResizeFactor * MaxRec))<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_end StructHandle<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Else ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Close FileNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp; Until (FileNum = 0)<br>
+            End_Procedure // ResizeFiles</p>
+              </font><font SIZE="2"><p>The above sample code is a very simple straightforward approach
+            to the ResizeFiles functionality. It does not give any feedback to the user. This will be
+            corrected in a later version. For the moment we want to take a look at the data definition
+            part of the code only.</p>
+            <p>Lets walk through the procedure and look at the relevant parts.</p>
+            <b><p>Step 1: Opening the file for definition changes.</p>
+            </b></font><font FACE="Courier New" SIZE="1"><p>Open FileNum Mode DF_EXCLUSIVE</p>
+            </font><font SIZE="2"><p>The first thing that needs to be done when changing an existing
+            table definition is opening the table exclusively. Changes of this magnitude can only be
+            made if nobody else has the table open. To finish a data (re)definition, the table will
+            most likely have to be copied, removed, re-indexed or recreated. This cannot be done if
+            the table in question is open.</p>
+            <b><p>Step 2: Starting a re-structure operation.</p>
+            </b></font><font FACE="Courier New" SIZE="1"><p>Move FileNum To StructHandle<br>
+      Structure_Start StructHandle</p>
+            </font><font SIZE="2"><p>A Structure_Start operation begins any definition or
+            redefinition. If the command starts a new table definition or will change an existing
+            definition depends on the argument. The argument is used both for input and output
+            purposes. The input values can be:</p>
+            <p>0 - Start a new table definition</p>
+            <p>An existing file number &#150; Change that tables definition.</p>
+            <p>The command will place a structure handle in the variable passed as an argument (for
+            this reason you cannot pass a constant). A structure handle is a number that is used
+            internally to reference the temporary definition. A structure will be temporary until it
+            is made permanent by using the Structure_end command.</p>
+            <b><p>Step 3: Ending a re-structure operation.</p>
+            </b></font><font FACE="Courier New" SIZE="1"><p>Structure_end StructHandle</p>
+            </font><font SIZE="2"><p>The Structure_end command will make all changes to the structure
+            since the Structure_Start command permanent. It will perform all necessary actions such
+            as; re-indexing, automatically. Depending on the type of changes made, this command can
+            take quite some time.</p>
+            <p>Please note that the Set_attribute command between the Structure_Start and
+            Structure_End commands use the structure handle returned by the Structure_Start command.
+            If you use the file number instead, the changes would not be saved. In addition, an error
+            message (..not allowed to set the maximum number of records outside a Structure_Start .
+            Strcuture_End (or Structure_Abort) pair of commands.) would be returned.</p>
+            <p>The sample program that is part of this white paper contains a report view that
+            performs this function. Take a look at it. It can be started by choosing &quot;Resize
+            sample 1&quot;, in the reports menu of the program, source code can be found in <i><b>resize01.rv</b></i>.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334342">Feedback</a></font></p>
+            </b></i><font SIZE="2"><p>The first resize sample, although simple, is not really usable.
+            We need to give feedback to the user, to advise them what the program is doing. If
+            feedback is not given users will eventually assume the programs &quot;hangs&quot; and take
+            drastic measures to stop it. This can result in corrupt data and other unwanted problems.</p>
+            <p>DataFlex uses the sentinel technique to report progress of long processes to the end
+            user. We will use this same technique to inform the user of the progress of the resize
+            algorithm. Adding a sentinel to the resize logic is an easy task if we just want to show
+            string information. The source code for such an addition can be found in the &quot;Resize
+            sample 2&quot; code stored in <i><b>resize02.rv</b></i>.</p>
+            <p>When using the second sample, you get feedback but it is not enough. Increasing the
+            maximum number of records forces a re-index of all indexes defined for the table.
+            Depending on the number of records in use in the table this may be a time consuming
+            operation. You want to show the user the progress of the index process. Using the callback
+            facility of the strcuture_end command enables us to do this. This facility enables us to
+            designate an object that receives messages, while the re-indexing is in progress. The
+            message gives information about the current status of the process.</font></p>
+            <p><font face="Times New Roman"><small><a NAME="_Toc440334343">The Callback Mechanism</a></small></font></p>
+            <font SIZE="2"><p>Several DataFlex commands, which can take a long time to finish have the
+            callback facility. We will use this to give more detailed information to the user. The
+            callback facility works the same for all commands that have it implemented. The command in
+            question receives an object address. The command will send a DataFlex message to the
+            object. The interval at which this happens can be setup by the
+            DF_RUNTIME_PROGRESS_FREQUENCY attribute. The message that is sent is a function called
+            Callback. You need to write this function yourself. It should be defined as follows:</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Function Callback String CallbackMsg Integer
+            CallbackType Returns Integer</p>
+            </font><font SIZE="2"><p>The different types of messages that can be passed are explained
+            in detail in the help information. See the &quot;Callback function&quot; topic. As you can
+            see from the help information, the Callback function gives information about the progress
+            in terms of the processed items against the total number of items. This information can
+            best be represented in a progress bar. The problem we have is that the sentinel we use for
+            progress reporting does not support a progress bar. You will need to write your own
+            sentinel logic to support a progress bar.</font></p>
+            <p><small><font face="Times New Roman"><a NAME="_Toc440334344">Changing the Sentinel</a></font></small></p>
+            <font SIZE="2"><p>The DataFlex sentinel is a separate DataFlex program that communicates
+            with the program doing the processing. The source code of this program can be found in the
+            package directory of the VDF installation and is called <i><b>sentinel.src</b></i>. We
+            have adjusted that program by copying it to another file and adding or amending the code.
+            It can be found in <i><b>prgssent.src</b></i>.</p>
+            <p>The first thing to do is change the user interface of the sentinel panel. Adjust the
+            size a little and add a progress bar object. A second change is to adjust the logic that
+            handles the display of messages to the user. Use the interface that is in place with a
+            slight adjustment. When an action description is passed to the sentinel it will check if
+            that description starts with &quot;<i><b>__PROGRESS__</b></i>&quot; if that is the case
+            the rest of that description is treated as a percentage and should be displayed in the
+            progress bar. All changes to the original source are marked &quot;<i><b>//*** BW</b></i>&quot;.</p>
+            <p>The second step is to create the appropriate callback function. It should pass
+            correctly formatted descriptions to the new sentinel program. The function&#146;s code is
+            fairly simple and can be found below:</p>
+            </font><font FACE="Courier New" SIZE="1">
+  <p>Function Callback String CallbackMsg Integer CallbackType ;<br>
+  &nbsp;&nbsp; Returns Integer<br>
+              <br>
+  &nbsp;&nbsp; Local Number Ready<br>
+  &nbsp;&nbsp; Local Number Total<br>
+  &nbsp;&nbsp; Local Number Perc<br>
+  &nbsp;&nbsp; Local Integer Statpan<br>
+              <br>
+  &nbsp;&nbsp; Move (Status_panel(Self)) To Statpan<br>
+              <br>
+  &nbsp;&nbsp; If Statpan Begin<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If CallbackType Ne DF_MESSAGE_PROGRESS_VALUE ;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Send Update_statuspanel To
+  Statpan CallbackMsg<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Else Begin<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Interpret numbers<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move (Left(CallbackMsg,
+  (Pos(&quot;,&quot;, CallbackMsg) - 1))) ;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To Ready<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move (Right(CallBackMsg, ;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Length(CallbackMsg)
+  - Pos(&quot;,&quot;, CallbackMsg)))) ;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To
+  Total<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move ((Ready/Total) * 100) To
+  Perc<br>
+              <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Send Update_statuspanel To
+  Statpan ;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&quot;__PROGRESS__&quot;
+  + String(Integer(Perc)))<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+  &nbsp;&nbsp; End<br>
+              <br>
+  &nbsp;&nbsp; Function_return DFFALSE<br>
+  End_function // Callback</p>
+            </font><font SIZE="2"><p>The last step is to actually call the Callback function during
+            structure_end. Passing some extra arguments to the command handles this. The line of code
+            in question can be found below and the complete code of the resize sample that uses the
+            progress sentinel in <i><b>resize03.rv</b></i>.</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Structure_end StructHandle
+            DF_STRUCTEND_OPT_NONE &quot;.&quot; (Main(Self))</p>
+            </font><font SIZE="2"><p>The Callback function is placed in the main panel of the
+            application. We pass the address of the main panel as the callback object address. This
+            makes the connection between the command and the callback function. Please note that
+            nothing stops you from having multiple Callback functions in multiple objects. Each of
+            these functions can have its own logic and is invoked by passing the containing objects
+            address to a &quot;callback facilitated&quot; command.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334345">Error Handling</a></font></p>
+            </b></i><font SIZE="2"><p>In case a file cannot be opened the program will abort. This is
+            because the error object treats error 75 &quot;Can&#146;t open file&quot; as a critical
+            error. In order for our sample to run even if one or more files in the Filelist cannot be
+            opened, we would need to make error 75 non-critical. This can be achieved very simply by
+            ignoring the error completely. One single line achieves this:</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Send Ignore_error To Error_object_id 75</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334346">Sorting all Indexes</a></font></p>
+            </b></i><font SIZE="2"><p>One question that keeps getting asked is about re-indexing all
+            associated indexes of all tables in a Filelist. Some installations do a re-index regularly
+            to ensure that the indexes are up to date. There are installations that re-index every
+            night. A procedure that has the desired functionality can be built very easily. It uses
+            the sort command, which is a &quot;callback facilitated&quot; command. We will use the
+            same callback/progress sentinel logic we used in the previous resize sample.</p>
+            <p>Basically the procedure that sorts all files is the same as the ResizeFiles procedure.
+            The only difference is the code that is executed in the loop, instead of resizing is
+            re-indexed. To re-index you need to use the <i><b>sort</b></i> command. This command is
+            documented in the help information. As you can see we need to pass a string, which
+            specifies the indexes to sort. To be able to compose such a string you need to determine
+            which indexes are defined for a certain table. There is no direct way to determine which
+            indexes exist for a table. You can find out however by using the index attributes. This is
+            done in the function IndexString, which returns all indexes for a given table as a string
+            that can be used by the sort command. The code for the ReindexFiles procedure can be found
+            in <i><b>reindex.rv</b></i>.</p>
+            <p>As you can see it is the resize procedure slightly adjusted. The principle of
+            traversing the FileList or selecting a workspace does not change.</font></p>
+            <p><font face="Times New Roman"><small><a NAME="_Toc440334347">Handling Bad Files</a></small></font></p>
+            <font SIZE="2"><p>The sort command has options that determine what happens when bad or
+            duplicate data is encountered. You have to set those options in such a way that a BAD file
+            is created. The sort command creates those files but does not delete them before starting
+            the sort. You will need to take care of that yourself. You will have to check for every
+            file to re-index, and if a bad file exists, remove that file before starting the sort.
+            This enables you to check for a bad file after sorting to see if anything went wrong.</p>
+            <p>The code to remove the bad file uses the Find_file global function. This function
+            returns the full path of a file. This is needed by the Erasefile command since it only
+            uses the first directory in DFPATH. It is not explained in detail in this document.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334348">Conclusion</a></font></p>
+            </b></i><font SIZE="2"><p>The procedures discussed above can be adjusted to meet your
+            needs easily. An obvious improvement would be to combine the resize and re-index
+            functionality into one procedure. Another change would be to remove all user interactions
+            before starting the process. This would enable you to run these processes by using some
+            scheduler that starts the program every night. These adjustments are not discussed in this
+            document.<br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a name="Converting an Installed Database"><font face="Times New Roman" size="4">Converting
+            an Installed Database</font></a></p>
+            </b><font SIZE="2"><p>The previous samples illustrate how to use the data definition
+            commands to maintain an installed database. Another area the commands are commonly used
+            for is to convert an installed database. When a new version of a DataFlex program is
+            created, often the accompanying database needs to be updated. To support new
+            functionality; fields, indexes or complete tables have been added. In older versions of
+            DataFlex this was a big problem. In newer versions you can create a DataFlex program that
+            is part of the installation to update the existing database. If the database definition
+            changes the only problem is with those tables of which the definition changes. If a
+            completely new table is added there is no need to update existing data since there is
+            none, these tables can be copied into the user&#146;s environment.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334350">Changing a Field
+            Definition</a></font></p>
+            </b></i><font SIZE="2"><p>A frequent change to database systems, is the change of a
+            certain field&#146;s definition. A common change is to expand a field&#146;s size to allow
+            more data. The millenium issue forced a lot of applications to expand field sizes for week
+            number with two positions. Suppose a file with a week number field that is numeric and has
+            a length of 4. This field will have contents like 9801, 9802 etcetera. You to expand the
+            field by two positions so the century will be added to the week - allowing a proper sort
+            order on the field. The week number field would than contain values like 199801, 199802,
+            200001 etc.</p>
+            <p>A procedure that makes a change as described above looks like:</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Procedure AdjustWeekFieldSize Integer FileNum
+            String FieldName<br>
+              &nbsp;&nbsp; Local Integer IsOpen<br>
+              &nbsp;&nbsp; Local Integer StructHandle<br>
+              &nbsp;&nbsp; Local Integer FieldNumber<br>
+              &nbsp;&nbsp; Local Integer CurrentLength<br>
+              <br>
+              &nbsp;&nbsp; //*** Check if file is open, if so close it<br>
+              &nbsp;&nbsp; Get_attribute DF_FILE_OPENED Of FileNum To IsOpen<br>
+              &nbsp;&nbsp; If IsOpen ;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Close FileNum<br>
+              &nbsp;&nbsp; //*** Open file for changing definition<br>
+              &nbsp;&nbsp; Open FileNum Mode DF_EXCLUSIVE<br>
+              &nbsp;&nbsp; [Found] Move 1 To IsOpen<br>
+              &nbsp;&nbsp; [~Found] Move 0 To IsOpen<br>
+              &nbsp;&nbsp; If IsOpen Begin<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Determine field number<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Field_map FileNum FieldName To FieldNumber<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Adjust size<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If FieldNumber Begin<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_LENGTH Of FileNum FieldNumber
+              ;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To CurrentLength<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (CurrentLength &lt;&gt; 6) Begin<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move FileNum To StructHandle<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_start StructHandle<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_FIELD_LENGTH Of StructHandle
+              ;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FieldNumber To 6<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_end StructHandle DF_STRUCTEND_OPT_FORCE
+              ;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;.&quot; Self<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+              &nbsp;&nbsp; End<br>
+              End_Procedure // AdjustWeekFieldSize</p>
+            <p>Procedure AdjustContents Integer FileNum String FieldName<br>
+            &nbsp;&nbsp; Local Integer IsOPen<br>
+            &nbsp;&nbsp; Local Integer FieldNumber<br>
+            &nbsp;&nbsp; Local Integer CurrentValue<br>
+            &nbsp;&nbsp; Local Integer FileFound<br>
+            <br>
+            &nbsp;&nbsp; //*** Check if the file is open, if not open it<br>
+            &nbsp;&nbsp; Get_attribute DF_FILE_OPENED Of FileNum To IsOpen<br>
+            &nbsp;&nbsp; If (Not(IsOpen)) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Open FileNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Found] Move 1 To IsOpen<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [~Found] Move 0 To IsOpen<br>
+            &nbsp;&nbsp; End<br>
+            &nbsp;&nbsp; If IsOpen Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Determine field number<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Field_map FileNum FieldName To FieldNumber<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Adjust records<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Repeat<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VFind FileNum 0 GT<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Found] Move 1 To FileFound<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [~Found] Move 0 To FileFound<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If FileFound Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_Field_Value FileNum FieldNumber To CurrentValue<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            (CurrentValue &lt; 190000) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reread<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Field_Value FileNum FieldNumber
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To
+            (CurrentValue + 190000)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Saverecord FileNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Unlock<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Until (Not(FileFound))<br>
+            &nbsp;&nbsp; End<br>
+            End_Procedure // AdjustContents</p>
+              </font><font SIZE="2"><p>The sample code above contains two general procedures, which can
+            be used to change a week number field in any given file. The field size is adjusted by the
+            AdjustWeekFieldSize procedure. The field&#146;s content is changed by the AdjustContents
+            procedure. In a specific situation, the procedures should be called for every field. If we
+            wanted to change the field Week_Number in the file Billing, we would need to execute the
+            following code:</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Send AdjustWeekFieldSize Billing.File_number
+            &quot;Week_Number&quot;<br>
+Send AdjustContents Billing.File_Number &quot;Week_Number&quot;</p>
+            </font><font SIZE="2"><p>In general, changing an existing field definition is as simple as
+            the procedure AdjustWeekFieldSize indicates. To change a field definition, you need to
+            start a structure and setup the field attributes to the desired values. End the structure
+            to make the changes permanent.</font></p>
+            <i><b><p><a NAME="_Toc440334351"><font face="Times New Roman" size="3">Adding and/or
+            Removing Fields</font><font FACE="Arial">.</a></p>
+            </font></b></i><font SIZE="2"><p>Another frequent change, is the addition or removal of
+            fields in existing tables. In general this is as easy as changing an existing field. Be
+            aware that adding or removing a field will adjust field numbers in the file definition. If
+            for example a field is inserted at position 5 and another field is also inserted at this
+            position, the first inserted field will have shifted to position 6.</p>
+            <p>When a field is created it will have a default definition. The name is generated, the
+            type is ASCII and the length is 0 (zero). Of course you want to change this. Be aware that
+            some settings are type dependent. If you want to set a precision for a field, the type
+            must be numeric. If you want to define a main index for a field, the field must be a
+            segment of the index. In general, you can best set the field attributes in the order:
+            Name, Type, Length, Precision, Field_related_file and Field_related_field. Deleting fields
+            is even simpler than creating them. When a field is deleted and it is part of an index, it
+            is automatically deleted from the index too. Be aware that deleting fields that are part
+            of an index may cause indexes to contain duplicates.</p>
+            <p>Fields are created by the Create_Field command and deleted by the Delete_Field command.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334352">Creating Indexes</a></font></p>
+            </b></i><font SIZE="2"><p>Indexes are used to give fast access to data and to ensure that
+            certain data is unique. When a program&#146;s functionality changes, often there is a need
+            for new indexes. New indexes can be created easily in DataFlex.</p>
+            <b><p>Creating an index at a specified position</p>
+            </b><p>The Create_index command, will create an index with the first available index
+            number. This is not always desired. Sometimes you want to create an index at a specified
+            position thus creating holes in the index numbering. The trick to achieve this is to
+            create all indexes until the desired number has been created and then deleting the
+            unnecessary indexes again.</p>
+<p></font><font FACE="Courier New" SIZE="1">Procedure Create_index_at_number Integer
+            Struct_handle ;<br>
+            &nbsp;&nbsp; Integer Index_num<br>
+            <br>
+            &nbsp;&nbsp; Local String Dummy_indexes<br>
+            &nbsp;&nbsp; Local Integer Num_seg<br>
+            &nbsp;&nbsp; Local Integer Count<br>
+            &nbsp;&nbsp; Local Integer Dummy_num</p>
+            <p>&nbsp;&nbsp; //*** Create dummy indexes<br>
+            &nbsp;&nbsp; Move &quot;&quot; To Dummy_indexes<br>
+            &nbsp;&nbsp; For Count From 1 To (Index_num - 1)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Check if index exists, ifnot create it<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_INDEX_NUMBER_SEGMENTS Of
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Struct_handle Count To Num_seg<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (Not(Num_seg)) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create_index Struct_handle At Dummy_num<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Append Dummy_indexes
+            (Character(Count))<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp; Loop<br>
+            &nbsp;&nbsp; //*** Create actual index<br>
+            &nbsp;&nbsp; Create_index Struct_handle At Dummy_num<br>
+            &nbsp;&nbsp; //*** Delete dummy indexes<br>
+            &nbsp;&nbsp; For Count From 1 To (Index_num - 1)<br>
+            &nbsp;&nbsp; //*** Check if index was dummied, if so delete it<br>
+            &nbsp;&nbsp; If (Character(Count)) In Dummy_indexes ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delete_index Struct_handle Count<br>
+            &nbsp;&nbsp; Loop<br>
+            End_Procedure // Create_index_at_number</p>
+            </font><font SIZE="2"><b><p>Creating, deleting or inserting segments</p>
+            </b><p>An index contains a number of segments. There is no Create_segment command however.
+            The way to create an index with 2 segments would be to create the index and set the
+            DF_INDEX_NUMBER_SEGMENTS attribute of the index to 2. If you want to change an existing
+            index by inserting a segment, you would need to reset the number of segments before
+            setting the new segments attributes. The same applies to deleting a segment. If you want
+            to add or delete the last segment, you only need to reset the number of segments. If you
+            want to add or delete another segment you must reset the segment attributes of all
+            following segments. If you have an index of 4 segments and delete segment 2 you need to
+            copy the segment attributes of segment 3 to segment 2, of segment 4 to segment 3 and then
+            reset the number of segments to 3.</p>
+            <p>To add an index to the Billing file which contains two ascending segments, the fields
+            Week_id and BillingNumber, use the following procedure:</p>
+            </font><font FACE="Courier New" SIZE="1">
+<p>Procedure AddIndexToBilling<br>
+            &nbsp;&nbsp; Local Integer IsOPen<br>
+            &nbsp;&nbsp; Local Integer StructHandle<br>
+            &nbsp;&nbsp; Local Integer IndxNum<br>
+            &nbsp;&nbsp; Local Integer WeekIdField<br>
+            &nbsp;&nbsp; Local Integer BillingNumberField<br>
+            <br>
+            &nbsp;&nbsp; //*** Check if file is open, if so close it<br>
+            &nbsp;&nbsp; Get_attribute DF_FILE_OPENED Of Billing.File_Number To IsOpen<br>
+            &nbsp;&nbsp; If IsOpen ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Close Billing<br>
+            &nbsp;&nbsp; //*** Open file for changing definition<br>
+            &nbsp;&nbsp; Open Billing Mode DF_EXCLUSIVE<br>
+            &nbsp;&nbsp; [Found] Move 1 To IsOpen<br>
+            &nbsp;&nbsp; [~Found] Move 0 To IsOpen<br>
+            &nbsp;&nbsp; If IsOpen Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Determine field numbers<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Field_map Billing.File_number &quot;WEEK_ID&quot; To WeekIdField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Field_map Billing.File_number &quot;BILLINGNUMBER&quot; To
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BillingNumberField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Add index<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move Billing.File_number To Structhandle<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_start StructHandle<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move 0 To IndxNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create_index StructHandle At IndxNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_INDEX_NUMBER_SEGMENTS Of
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StructHandle IndxNum To 2<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_INDEX_SEGMENT_FIELD Of
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StructHandle IndxNum 1
+            To WeekIdField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_INDEX_SEGMENT_FIELD Of
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StructHandle IndxNum 2
+            To BillingNumberField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_end StructHandle DF_STRUCTEND_OPT_FORCE
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;.&quot; Self<br>
+            &nbsp;&nbsp; End<br>
+            End_Procedure // AddIndexToBilling</p>
+            <p><br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a name="Converting Data to a non-DataFlex Format"><font face="Times New Roman"
+            size="4">Converting Data to a non-DataFlex Format</font></a></p>
+            </b><font SIZE="2"><p>The first thing that comes to mind when using database drivers to
+            access a non-DataFlex format is how to convert existing data. When the non-DataFlex
+            database is accessed through an API driver that supports re-structure functionality the
+            conversion is relatively easy. A very simple DataFlex procedure can be used to convert the
+            data. Be aware that every non-DataFlex format has its own rules to what is acceptable.
+            This may cause perfectly legal data in one format to be completely illegal in another.</p>
+            <p>The original idea when designing the DataFlex API was that conversion could be handled
+            in one procedure for all target formats. This is reflected in the conversion option in the
+            DFAdmin program that is part of the character mode versions of DataFlex. As drivers became
+            available it became clear that this is not possible. It turns out drivers need extra
+            information to take full advantage of the non-DataFlex format&#146;s capabilities. This is
+            why DataBase Builder has a different conversion option for every driver that can be
+            loaded.</p>
+            <p>The conversion functions in DataBase Builder are also written in DataFlex. It is
+            possible to write a DataFlex application that handles the conversion. Companies that have
+            an application they want to make available for different platforms, could write an
+            automatic conversion utility for every backend they want to support.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334354">Converting to
+            Btrieve</a></font></p>
+            </b></i><font SIZE="2"><p>When converting to Btrieve you need to use the <i><b>dfbtrdrv.pkg</b></i>
+            package. Conversion is handled by calling a pass through function in the Btrieve driver.
+            This function gets conversion options as arguments. All of this is documented in the
+            Btrieve driver documentation. You can use the Structure_copy method discussed below, but
+            the pass through function is intended to be used for converting and the most efficient
+            solution.</p>
+            <p>Pass through functions can be added to a driver when the driver offers functionality
+            that is not part of a standard API driver. Since every database format has it own
+            peculiarities it is impossible to define an API that covers everything. Pass through
+            functions are intended to fill those gaps. They can be called by using the Call_driver
+            command. This command is &quot;callback facilitated&quot;. If passing the callback object
+            results in the callback mechanism being used, it then depends on the function&#146;s
+            implementation of the driver.</p>
+            <p>Call the DFBTRFN_CONVERT_FILE function, which has callback support and gets the
+            following arguments:</p>
+            <p>Owner, and owner name used by Btrieve to restrict access to the data</p>
+            <p>The second string argument is not used</p>
+            <p>Options, a combination of the convert options DFBTRCNV_DELETE_FILE_AFTER_CONVERSION,
+            DFBTRCNV_RECNUM_SUPPORT, DFBTROWNER_READONLY_ALLOWED and DFBTROWNER_ENCRYPT_DATA</p>
+            <p>To convert a file into a Btrieve file without an Owner name, deleting the original
+            after conversion and with recnum support you would need the following code:</p>
+            </font><font FACE="Courier New" SIZE="1">
+<p>Open FileNum Mode DF_EXCLUSIVE<br>
+[Found] Move 1 To FileIsOpen<br>
+[~Found] Move 0 To FileIsOpen<br>
+If FileIsOpen Begin<br>
+&nbsp;&nbsp; Move &quot;&quot; To Owner<br>
+&nbsp;&nbsp; Move &quot;&quot; To Dummy<br>
+&nbsp;&nbsp; Move (DFBTRCNV_DELETE_FILE_AFTER_CONVERSION iOr ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DFBTRCNV_RECNUM_SUPPORT) To ConvertOpt<br>
+&nbsp;&nbsp; Call_driver FileNum DFBTRDRV_ID Function DFBTRFN_CONVERT_FILE ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Callback (Main(Self)) Passing Owner Dummy
+ConvertOpt ;<br>
+&nbsp;&nbsp; Result BtrConvResult<br>
+End</p>
+            </font><font SIZE="2"><p>The code above is not complete, the variable definition has been
+            skipped completely. It assumes that there is a Callback function defined in the Main panel
+            of the application. The Call_driver command does not accept constants as arguments. You
+            must use variables even if you want to pass an empty string. You can embed the code in a
+            loop that traverses the FileList to convert all files in a FileList.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334355">Converting to ODBC
+            or DB2</a></font></p>
+            </b></i><font SIZE="2"><p>When converting to ODBC or DB2 you can use standard DataFlex
+            commands. The idea is to create a new empty table in the target database format and copy
+            an existing definition on top of the new one. The following piece of code can be used to
+            convert to either of the mentioned formats.</p>
+            </font><font FACE="Courier New" SIZE="1">
+<p>Open FileNum Mode DF_EXCLUSIVE<br>
+            [Found] Move 1 To FileIsOpen<br>
+            [~Found] Move 0 To FileIsOpen<br>
+            If FileIsOpen Begin<br>
+            &nbsp;&nbsp; //*** Determine the phsysical name of the new file<br>
+            &nbsp;&nbsp; Get_Attribute DF_FILE_ROOT_NAME Of FileNum To PhysName<br>
+            &nbsp;&nbsp; Get Strip_path PhysName To PhysName<br>
+            &nbsp;&nbsp; Move (PhysName + &quot;.INT&quot;) To RootName<br>
+            &nbsp;&nbsp; //*** Setup the server to convert to<br>
+            &nbsp;&nbsp; Move &quot;DSN=SampleDataBase&quot; To ServerStr<br>
+            &nbsp;&nbsp; //*** Create new table in target format (DB2)<br>
+            &nbsp;&nbsp; Move 0 To StructHandle<br>
+            &nbsp;&nbsp; Structure_start StructHandle DB2_DRV_ID<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Copy old definition<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Structure_copy FileNum To StuctHandle<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Handle overlap fields<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FILE_NUMBER_FIELDS Of FileNum To NumFields<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For FieldCount From 1 To NumFields<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_TYPE Of FileNum FieldCount
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To FieldType<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (FieldType =
+            DF_OVERLAP) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Determine the field numbers that are
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //
+            &quot;overlapped&quot;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_OFFSET Of FileNum FieldCount
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To OVLOffset<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_LENGTH Of FileNum FieldCount
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To OVLSize<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move 0 To StartField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move 0 To EndField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move 1 To LastField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For FieldCount2 From 1 To NumFields<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_TYPE Of FileNum
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FieldCount2
+            To FieldType<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            (FieldType &lt;&gt; DF_OVERLAP) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_OFFSET Of FileNum
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FieldCount2
+            To FieldOffset<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_LENGTH Of FileNum
+            ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ FieldCount2 To FieldSize<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //***Check if field is start overlap<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            (FieldOffset &lt;= OVLOffset) ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move FieldCount2 To StartField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //***
+            Check if fields is end overlap<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            ((EndField = 0) And ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (FieldOffset &gt;= (OVLOffset + OVLSize))) ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move LastField To EndField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Register the field<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move FieldCount2 To LastField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loop<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            (EndField = 0) ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move LastField To EndField<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Get the new structure offset and length<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If
+            ((StartField &lt;&gt; 0) And ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (EndField &gt;=
+            StartField)) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_OFFSET Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; StartField To StartOffset<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_OFFSET Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EndField
+            To EndOffset<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_LENGTH Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EndField
+            To EndLength<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move
+            (EndOffset + EndLength) To EndOffset<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Setup overlap in new structure<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_FIELD_OFFSET Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FieldCount To StartOffset<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_FIELD_LENGTH Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FieldCount
+            To (EndOffset - StartOffset)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loop<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Add DFRECNUM and create an index for it<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move 0 To NewFieldNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create_field StructHandle At NewFieldNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FIELD_NAME Of StructHandle NewFieldNum
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To &quot;DFRECNUM&quot;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FIELD_TYPE Of StructHandle NewFieldNum
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To DF_BCD<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FIELD_LENGTH Of StructHandle NewFieldNum
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To 14<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create_index StructHandle At PrimaryIndex<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_INDEX_NUMBER_SEGMENTS Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PrimaryIndex To 1<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_attribute DF_INDEX_SEGMENT_FIELD Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PrimaryIndex 1 To NewFieldNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Setup login and name<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FILE_LOGIN Of StructHandle To ServerStr<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FILE_PHYSICAL_NAME Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To PhysName<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Attribute DF_FILE_RECORD_IDENTITY Of StructHandle
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To PrimaryIndex<br>
+            &nbsp;&nbsp; //*** Create the file<br>
+            &nbsp;&nbsp; Structure_end StructHandle 0 &quot;.&quot;<br>
+            <br>
+            &nbsp;&nbsp; //*** Open new table as temporary file<br>
+            &nbsp;&nbsp; Move 252 To TempCopy<br>
+            &nbsp;&nbsp; Open RootName As TempCopy<br>
+            &nbsp;&nbsp; [Err] Move 0 To Success<br>
+            &nbsp;&nbsp; [~Err] Move 1 To Success<br>
+            &nbsp;&nbsp; If Success Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Send CopyRecords FileNum TempCopy NewFieldNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Close TempCopy<br>
+            &nbsp;&nbsp; End<br>
+            End</p>
+            </font><font SIZE="2"><p>The above code is not complete, the variable definition has been
+            skipped completely. It does not use callback functionality at all. We wanted to keep the
+            code simple, since it does a few extra things that need some explanation.</p>
+            <p>First of all, there is a piece of code handling overlap fields. Overlaps are unknown
+            concepts in most environments including ODBC and DB2. In order to handle these fields
+            correctly, we have to make sure the overlaps start at the right position. We cannot simply
+            copy the field over, since the length of the fields in the target database may be
+            completely different from that of the original database. An offset and a length define an
+            overlap field. It is obvious that when field lengths are not the same between different
+            non-DataFlex formats, that the overlap fields need to be redefined. The code takes care of
+            this problem by determining the start and end field in the original file and setting up
+            the overlap offset and length accordingly in the target table. Be aware that this logic
+            will force overlaps on converted tables to overlap complete fields. Using the above code
+            it is impossible to convert so called &quot;underlaps&quot;. Both ODBC and DB2 support
+            &quot;underlaps&quot;, but not through the re-structure functionality. If you want to use
+            these types of fields you will have to convert using the logic above and later edit the
+            intermediate file manually to define the &quot;underlap&quot; fields.</p>
+            <p>The next step adds a field and an index to the table definition. This field is used as
+            record identity. The ODBC and DB2 drivers require a record identity to be present. Simply
+            adding one fulfills this requirement. Then a number of attributes are set that determine
+            to which database the file is converted, and what the table name on that database will be.
+            Finally the table is created by the structure_end command.</p>
+            <p>At this point we have created an empty table in the target database. The next step is
+            to copy the data to the target database. There is a Copy_records command that can be used.
+            It is not used in the sample code because Copy_records will abort as soon as an error
+            occurs. We want the copy process to try to copy all records even if some cannot be copied.
+            This is the reason we use our own procedure to copy records from the original file to the
+            converted table. Such a procedure is easy to write and can be found below.</p>
+            </font><font FACE="Courier New" SIZE="1">
+<p>ProcedureCopyRecords Integer OrgFileNum
+            ;<br>
+            &nbsp;&nbsp; Integer TargetFileNum Integer RNFieldNum<br>
+            <br>
+            &nbsp;&nbsp; Local String FieldBuf<br>
+            &nbsp;&nbsp; Local Integer DFNUmFields<br>
+            &nbsp;&nbsp; Local Integer FieldCount<br>
+            &nbsp;&nbsp; Local Integer DFFound<br>
+            &nbsp;&nbsp; Local Integer RecCount<br>
+            &nbsp;&nbsp; Local Integer FieldType<br>
+            &nbsp;&nbsp; Local Integer Org_arg_size<br>
+            &nbsp;&nbsp; Local Integer NumLocks<br>
+            &nbsp;&nbsp; Local Integer ErrCount<br>
+            <br>
+            &nbsp;&nbsp; //*** Get the number of fields<br>
+            &nbsp;&nbsp; Get_attribute DF_FILE_NUMBER_FIELDS Of DFFileNum To DFNumFields<br>
+            &nbsp;&nbsp; //*** Make sure we can handle all fields<br>
+            &nbsp;&nbsp; Get_argument_size To Org_arg_size<br>
+            &nbsp;&nbsp; Set_argument_size 16384<br>
+            &nbsp;&nbsp; Clear OrgFileNum<br>
+            &nbsp;&nbsp; //*** Ideally we would lock once creating one big transaction.<br>
+            &nbsp;&nbsp; //*** Unfortunately this does not work. In DB2 for example<br>
+            &nbsp;&nbsp; //*** transaction are logged in a transaction log. This log<br>
+            &nbsp;&nbsp; //*** is filled until commit or rollback is done. The room<br>
+            &nbsp;&nbsp; //*** for this log is limited. We will therefor lock every<br>
+            &nbsp;&nbsp; //*** 25 records.<br>
+            &nbsp;&nbsp; Repeat<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VFind OrgFileNum 0 Gt<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Found] Move DFTRUE To DFFound<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [~Found] Move DFFALSE To DFFound<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If DFFound Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Increment RecCount<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** If no lock active, lock<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_current_lockcount To NumLocks<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (Not(NumLocks)) ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lock<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Copy the record<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Clear TargetFileNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For FieldCount From 1 To DFNumFields<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_attribute DF_FIELD_TYPE Of DFFIleNum FieldCount
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To FieldType<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+            (FieldType &lt;&gt; DF_OVERLAP) Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_Field_Value OrgFileNum FieldCount To FieldBuf<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Field_Value TargetFileNum FieldCount
+            ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To FieldBuf<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loop<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Copy record identifier<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If RNFieldNum Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get_Field_Value OrgFileNum 0 To FieldBuf<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set_Field_Value TargetFileNum RNFieldNum To FieldBuf<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** Save the record<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Saverecord TargetFileNum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //**** Check for errors<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Err] Begin<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Increment ErrCount<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indicate Err False<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //*** If this is a &quot;25th&quot; record, unlock<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If (Mod(RecCount, 25) = 0) ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Unlock<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End<br>
+            &nbsp;&nbsp; Until (Not(DFFound))<br>
+            &nbsp;&nbsp; //*** If lock active, unlock<br>
+            &nbsp;&nbsp; Get_current_lockcount To NumLocks<br>
+            &nbsp;&nbsp; If NumLocks ;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UnLock<br>
+            &nbsp;&nbsp; //*** Reset argument size<br>
+            &nbsp;&nbsp; Set_argument_size Org_arg_size<br>
+            End_Procedure // CopyRecords</p>
+            <p><br>
+            </font><a href="#Contents"><font face="Times New Roman">Contents</font></a></p>
+            <b><p><a name="Tips &amp; Tricks"><font face="t" size="4">Tips &amp; Tricks</font></a></p>
+            </b><font SIZE="2"><p>This section discusses several tips and tricks that may be useful
+            when writing data definition programs.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334357">Create One File at
+            a Time</a> </font></p>
+            </b></i><font SIZE="2"><p>The API does not support creating more than one new file at a
+            time. You can change more than one file definition but you can only create one file at a
+            time. You should be aware of this restriction, it is not documented anywhere.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334358">Don&#146;t Convert
+            Flexerrs</a></font></p>
+            </b></i><font SIZE="2"><p>You should never convert Flexerrs. This file is needed by the
+            runtime to find error text. The runtime opens Flexerrs directly, it doesn&#146;t use the
+            API when accessing Flexerrs. This enables the runtime to show error text when opening
+            files. It is possible that the driver is not setup correctly, having the error text in a
+            format only readable when using the driver would make that impossible.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334359">DF_FILE_OPENED
+            attribute</a></font></p>
+            </b></i><font SIZE="2"><p>The DF_FILE_OPENED attribute indicates if a file is open. It
+            only indicates if a file is open in the current program. If another program happens to
+            have the file open, this will not be reflected in this attribute.</font></p>
+            <i><b><p><font face="Times New Roman" size="3"><a NAME="_Toc440334360">Converting Within
+            ODBC</a></font></p>
+            </b></i><font SIZE="2"><p>There is a trick when using the ODBC Client to convert from one
+            ODBC backend to another. You can use a DataFlex program to convert tables from Oracle to
+            dBase (or vice versa) with four lines of code. This is a powerful feature of the Data
+            Access ODBC Client. If for example, you have a dBase file called &quot;sample&quot; and a
+            data source called &quot;dBaseData&quot; and want to convert that field to an Oracle table
+            in a data source called &quot;OracleData&quot;, you would need the following code:</p>
+            </font><font FACE="Courier New" SIZE="1"><p>Move Sample.File_Number To StructHandle<br>
+            Structure_start StructHandle<br>
+            Set Attribute DF_FILE_LOGIN Of Struct_handle ;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To &quot;DSN=OracleData&quot;<br>
+            Structure_end StructHandle 0 &quot;.&quot;</p>
+            </font><address>
+              <font face="Times New Roman"><small>DataFlex is a registered trademark of Data Access
+              Corporation</small> </font>
+            </address>
+            </td>
+          </tr>
+          <tr>
+            <td height="25" width="44"></td>
+            <td height="15" width="395"></td>
+          </tr>
+          <tr>
+            <td height="25" width="44"></td>
+            <td height="15" width="395"><a href="#compload"><font face="Times New Roman">Back to top</font></a></td>
+          </tr>
+          <tr>
+            <td height="25" width="44"></td>
+            <td height="15" width="395"></td>
+          </tr>
+          <tr>
+            <td width="44"></td>
+            <td width="395"><font face="Times New Roman"><small><img src="images/supdottedline.gif"
+            alt="supdottedline.gif (129 bytes)" WIDTH="390" HEIGHT="3"></small></font></td>
+          </tr>
+          <tr>
+            <td height="25" width="44"></td>
+            <td height="25" width="395"></td>
+          </tr>
+          <tr>
+            <td width="44"></td>
+            <td width="395"><font face="Times New Roman"><small><img src="supaddress.gif"
+            alt="supaddress.gif (1847 bytes)" width="286" height="38"></small></font></td>
+          </tr>
+          <tr>
+            <td width="44"></td>
+            <td width="395"></td>
+          </tr>
+          <tr>
+            <td width="44"></td>
+            <td width="395"></td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+    </table>
+    <p><font face="Times New Roman"><br>
+    </font></td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

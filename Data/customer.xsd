@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.dataaccess.com/schemas/Customer" targetNamespace="http://www.dataaccess.com/schemas/Customer" elementFormDefault="qualified">
+	<xs:element name="CUSTOMERLIST">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CUSTOMER" type="tns:CUSTOMER" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="CUSTOMER">
+		<xs:sequence>
+			<xs:element name="CONTACT" type="tns:CONTACT" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="WEBSITE" type="xs:string"/>
+			<xs:element name="ADDRESS" type="tns:ADDRESS"/>
+			<xs:element name="SALES-REP" type="xs:string"/>
+			<xs:element name="TELEPHONE" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="NAME" type="xs:string" use="required"/>
+		<xs:attribute name="PRODUCT" type="xs:string" use="required"/>
+		<xs:attribute name="ATMOSPHERE" type="xs:string" use="required"/>
+		<xs:attribute name="Rating" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="CONTACT">
+		<xs:sequence>
+			<xs:element name="TELEPHONE" type="xs:string" minOccurs="0"/>
+			<xs:element name="FAX" type="xs:string" minOccurs="0"/>
+			<xs:element name="EMAIL" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="NAME" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ADDRESS">
+		<xs:sequence>
+			<xs:element name="STREET" type="xs:string"/>
+			<xs:element name="CITY" type="xs:string"/>
+			<xs:element name="STATE" type="xs:string"/>
+			<xs:element name="ZIP" type="xs:string"/>
+			<xs:element name="COUNTRY" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

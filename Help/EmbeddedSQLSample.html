@@ -1,0 +1,335 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<title>Running the DataFlex Embedded SQL Sample Application</title>
+</head>
+
+<body text="#000080" bgcolor="#ffffff">
+<p align="left"><strong><font face="Arial"><a name="top"><font color="#000080">Running</font></a>
+<font color="#000080">
+the DataFlex Embedded SQL Sample Application</font></font></strong></p>
+
+<p align="left"><font size="2" face="Arial"><font color="#000080">This </font>document
+will walk you through the Embedded SQL sample application step-by-step. You can
+leave this view open while working through the steps outlined in this document,
+or open the document in a separate browser window (you can do so by clicking the
+button below).</font></p>
+
+<p align="left"><b><font size="2" face="Arial">Topics</font></b></p>
+<ul>
+    <li>
+        <p align="left"><a href="#Setting up the Environment"><font size="2" face="Arial">Setting up the Environment</font></a></li>
+    <li>
+        <p align="left"><a href="#What do the Sample Views Demonstrate?"><font size="2" face="Arial">What do the Sample Views
+        Demonstrate?</font></a></li>
+</ul>
+<blockquote>
+    <ul>
+        <li>
+            <p align="left"><a href="#User's Guide Chapter 3 sample (ODBC)"><font face="Arial" size="2">'User's Guide Chapter 3
+            sample (ODBC)' View</font></a></li>
+        <li>
+            <p align="left"><a href="#Stored Procedure Sample (ODBC)"><font face="Arial" size="2">'Stored Procedure Sample
+            (ODBC)' View</font></a></li>
+        <li>
+            <p align="left"><a href="#Embedded SQL Query"><font face="Arial" size="2">'Embedded SQL Query'
+            Report View</font></a></li>
+        <li>
+            <p align="left"><a href="#Customers by total amount ordered"><font face="Arial" size="2">'Customers by total
+            amount ordered' Report View</font></a></li>
+        <li>
+            <p align="left"><a href="#Customers who ordered above average"><font face="Arial" size="2">'Customers who ordered
+            above average' Report View</font></a></li>
+        <li>
+            <p align="left"><a href="#User's Guide Chapter 3 sample (MSSQL)"><font face="Arial" size="2">'User's Guide Chapter 3
+            sample (MSSQL)' View</font></a></li>
+        <li>
+            <p align="left"><a href="#Stored Procedure Sample (MSSQL)"><font face="Arial" size="2">'Stored Procedure Sample
+            (MSSQL)' View</font></a></li>
+    </ul>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a href="#Additional Reading"><font face="Arial" size="2">Additional Reading</font></a></li>
+</ul>
+<p align="left"><b><font face="Arial"><a name="Setting up the Environment">Setting up the Environment</a></font></b></p>
+<p align="left"><font size="2" face="Arial">In order to use Embedded SQL in
+DataFlex, you have to use a database that supports SQL statements and a
+Connectivity Kit that supports Embedded SQL. The Connectivity Kits for
+ODBC, Microsoft SQL Server and IBM DB2 Universal Database support Embedded SQL.
+During the DataFlex Studio installation all three Connectivity Kits are installed for you 
+and this sample is ready to be used. You can also download the Connectivity Kits from our <a href="ftp://ftp.dataaccess.com/pub/products/connectivity/" target="_blank">ftp 
+site</a>.</font></p>
+<p align="left"><font size="2" face="Arial">For licensing reasons, databases
+that support Embedded SQL are not preinstalled with this sample. So, here is how
+to set up a quick test environment for this sample. We are going to use the
+Microsoft Access database and the ODBC Connectivity Kit for this document, but
+you can substitute the supported database our your choice.</font></p>
+<ol>
+    <li>
+        <p align="left"><font size="2" face="Arial">Create a new database:</font>
+        <ol type="a" style="font-family: Arial; font-size: 8pt">
+            <li>
+                <p align="left"><font size="2" face="Arial">Open Access, select
+                Blank Database, or select File &gt; New &gt; Database from the
+                menu</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Create the new
+                database in the &quot;C:\Program Files\DataFlex 19.1\Examples\Specialized Components\Embedded SQL\Data&quot;
+                folder, name the database Order.mdb</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Close Access</font></li>
+        </ol>
+    </li>
+    <li>
+        <p align="left"><font size="2" face="Arial">Create a DSN (Data Source
+        Name) for the new database:</font>
+        <ol type="a" style="font-family: Arial; font-size: 8pt">
+            <li>
+                <p align="left"><font size="2" face="Arial">Open Control Panel
+                &gt; Administrative Tools &gt; Data Sources (ODBC)</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Click on the
+                &quot;Add&quot; button</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Double-click on
+                &quot; Microsoft Access Driver&quot;</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Enter
+                &quot;Order&quot; in the &quot;Data Source Name&quot; window</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Click &quot;Ok&quot;</font></li>
+        </ol>
+    </li>
+    <li>
+        <p align="left"><font face="Arial" size="2">Convert the existing data
+        files in this sample workspace to ODBC:</font>
+        <ol type="a" style="font-family: Arial; font-size: 8pt">
+            <li>
+                <p align="left"><font face="Arial" size="2">Open Database
+                Builder</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Select Database &gt;
+                Convert to ODBC from the menu</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Select all data
+                files listed, except for FlexErrs</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Click on the
+                &quot;Convert&quot; button</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Select the Order DSN
+                (that you created in step 2) from the DSN lookup list</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Uncheck the
+                &quot;Delete original after conversion&quot; checkbox</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Leave all the other
+                defaults as they are</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Click on the
+                &quot;Ok&quot; button</font></li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Close Database
+                Builder</font></li>
+        </ol>
+    </li>
+    <li>
+        <p align="left"><font size="2" face="Arial">Run the Embedded SQL Sample
+        Application</font></li>
+</ol>
+<p align="left"><a href="#top"><font size="2" face="Arial">back to top</font>
+</a>
+<p align="left"><font face="Arial"><b><a name="What do the Sample Views Demonstrate?">What do the Sample Views Demonstrate?</a></b></font></p>
+<ul>
+    <li>
+        <p align="left"><a name="User's Guide Chapter 3 sample (ODBC)"><b><font face="Arial" size="2">'User's Guide Chapter 3
+        sample (ODBC)' View</font></b></a></li>
+</ul>
+<blockquote>
+    <p align="left"><font face="Arial" size="2">Requirements: ODBC compliant
+    database, ODBC Connectivity Kit</font><p align="left"><font size="2" face="Arial">This
+    sample demonstrates 2 topics discussed in chapter 3 of the Embedded SQL
+    User's Guide: executing a query using the message interface or using the
+    command interface.</font>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a name="Stored Procedure Sample (ODBC)"><b><font face="Arial" size="2">'Stored Procedure Sample
+        (ODBC)' View</font></b></a></li>
+</ul>
+<blockquote>
+        <p align="left"><font face="Arial" size="2">Requirements: ODBC compliant database,
+        ODBC Connectivity Kit</font>
+        <p align="left"><font size="2" face="Arial">This sample requires a
+        database that supports stored procedures, such as Microsoft SQL. This
+        sample demonstrates another topic discussed in chapter 3 of the Embedded
+        SQL User's Guide: calling a stored procedure.</font>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a name="Embedded SQL Query"><b><font face="Arial" size="2">'Embedded SQL Query' Report
+        View</font></b></a></li>
+</ul>
+<blockquote>
+        <p align="left"><font face="Arial" size="2">Requirements: ODBC compliant
+        database, ODBC Connectivity Kit</font>
+        <p align="left"><font size="2" face="Arial">Steps to test using this
+        view:</font>
+        <ol>
+            <li>
+                <p align="left"><font face="Arial" size="2">Click on the
+                &quot;Load&quot; button and select &quot;odbc_drv.dll&quot; from
+                the lookup list. This will load the ODBC Connectivity Kit into
+                memory.</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">The connection
+                string that is defaulted when this view is first opened, &quot;SERVER=(local);Trusted_Connection=yes;Database=Order&quot;,
+                is for use with the Microsoft SQL database. To use this view
+                with our ODBC sample database, change the connection string to
+                &quot;DSN=Order&quot; (without the quotes).</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Click on the
+                &quot;Login&quot; button. You should get a message box that
+                states &quot;login successful&quot;.</font></li>
+            <li>
+                <p align="left"><font size="2" face="Arial">Now that you are
+                connected to your database, you can add SQL statements to the
+                edit control that is below the QueryHistory window. Let's try a
+                simple one:</font>
+                <ol type="a" style="font-family: Arial; font-size: 8pt">
+                    <li>
+                        <p align="left"><font size="2" face="Arial">Type&nbsp;&quot;select
+                        * from vendor&quot; (without the quotes) into the edit
+                        control</font></li>
+                    <li>
+                        <p align="left"><font size="2" face="Arial">Click on the
+                        &quot;Run the SQL statement&quot; button on the right</font></li>
+                    <li>
+                        <p align="left"><font size="2" face="Arial">You will see
+                        the list below fill with all records and fields from the
+                        vendor database</font></li>
+                </ol>
+            </li>
+            <li><p align="left"><font size="2" face="Arial">You can load existing ones from a file.
+                For example, you can open the file 'CustomerInCAByName.sql',
+                located in the data folder of this sample application (C:\Program Files\DataFlex 19.1\Examples\Specialized Components\Embedded
+                SQL\Data), which will load an SQL statement that, when executed,
+                will display all customers in California sorted by name.&nbsp;</font></li>
+            <li><p align="left"><font size="2" face="Arial">You can save
+                SQL statements to a file for using in this view in the future.</font></li>
+        </ol>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a name="Customers by total amount ordered"><b><font face="Arial" size="2">'Customers by total amount
+        ordered' Report View</font></b></a></li>
+</ul>
+<blockquote>
+        <p align="left"><font face="Arial" size="2">Requirements: ODBC compliant
+        database, ODBC Connectivity Kit</font>
+        <ul>
+            <li>
+                <p align="left"><font face="Arial" size="2">Executes a query to
+                list all customers who ordered more than $1000, ordered by the
+                total amount ordered via:</font>
+                <ul>
+                    <li>
+                        <p align="left"><font face="Arial" size="2">A loop
+                        through a DataFlex data file.</font></li>
+                    <li>
+                        <p align="left"><font face="Arial" size="2">An SQL query
+                        against an SQL database.</font></li>
+                </ul>
+            </li>
+            <li>
+                <p align="left"><font face="Arial" size="2">Note that the
+                DataFlex procedure creates a temporary data file and fills it
+                with data to execute the query.</font></li>
+        </ul>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a name="Customers who ordered above average"><b><font face="Arial" size="2">'Customers who ordered above
+        average' Report View</font></b></a></li>
+</ul>
+<blockquote>
+        <p align="left"><font face="Arial" size="2">Requirements: ODBC compliant
+        database, ODBC Connectivity Kit</font>
+        <ul>
+            <li>
+                <p align="left"><font face="Arial" size="2">Executes a query to
+                list all customers who placed at least one order with an amount above the
+                average order amount via:</font>
+                <ul>
+                    <li>
+                        <p align="left"><font face="Arial" size="2">A loop
+                        through a DataFlex data file.</font></li>
+                    <li>
+                        <p align="left"><font face="Arial" size="2">An SQL query
+                        against an SQL database.</font></li>
+                </ul>
+            </li>
+        </ul>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a name="User's Guide Chapter 3 sample (MSSQL)"><b><font face="Arial" size="2">'User's Guide Chapter 3
+        sample (MSSQL)' View</font></b></a></li>
+</ul>
+<blockquote>
+        <p align="left"><font face="Arial" size="2">Requirements: Microsoft SQL,
+        MSSQL Connectivity Kit</font>
+        <p align="left"><font size="2" face="Arial">If you have the
+        MSSQL Connectivity Kit installed, you can simply add this
+        view to the existing Embedded SQL Sample Application and recompile that
+        application.</font><p align="left"><font size="2" face="Arial">This
+        sample demonstrates 2 topics discussed in chapter 3 of the Embedded SQL
+        User's Guide: executing a query using the message interface or using the
+        command interface.</font>
+</blockquote>
+<ul>
+    <li>
+        <p align="left"><a name="Stored Procedure Sample (MSSQL)"><b><font face="Arial" size="2">'Stored Procedure Sample
+        (MSSQL)'
+        View</font></b></a></li>
+</ul>
+<blockquote>
+        <p align="left"><font face="Arial" size="2">Requirements: Microsoft SQL,
+        MSSQL Connectivity Kit</font>
+        <p align="left"><font size="2" face="Arial">If you have the
+        MSSQL Connectivity Kit installed, you can simply add this
+        view to the existing Embedded SQL Sample Application and recompile that
+        application.</font>
+        <p align="left"><font size="2" face="Arial">This sample requires a
+        database that supports stored procedures, such as Microsoft SQL. This
+        sample demonstrates another topic discussed in chapter 3 of the Embedded
+        SQL User's Guide: calling a stored procedure.</font>
+</blockquote>
+        <p align="left"><a href="#top"><font face="Arial" size="2">back to top</font>
+        </a>
+<p align="left"><b><font face="Arial"><a name="Additional Reading">Additional Reading</a></font></b></p>
+<ul>
+    <li>
+        <p align="left"><font size="2" face="Arial">Please see the Using Embedded
+SQL book in the DataFlex Help for more information about Embedded SQL.</font></li>
+    <li>
+        <p align="left"><font size="2" face="Arial">Download any available Connectivity
+        Kit from our <a href="ftp://ftp.dataaccess.com/pub/products/connectivity/" target="_blank">ftp 
+        site</a>.</font></p>
+    <li>
+        <p align="left"><font face="Arial" size="2">Read more on Connectivity 
+        Kits from the available
+        <a href="http://www.dataaccess.com/content.asp?PageCode=SUP_G">White 
+        Papers</a> like </font><font size="2" face="Arial">
+        <a href="http://www.dataaccess.com/ChangePage.asp?PageCode=SUP_G_24WP">
+        Transactions, Locking and DataFlex</a> and
+        <a href="http://www.dataaccess.com/ChangePage.asp?PageCode=SUP_G_35WP">
+        Compatibility Issues Between DataFlex Databases and Databases Accessed 
+        Through CLI Based Connectivity Kits Version 2.1</a>.</font></li>
+</ul>
+
+</body>
+</html>

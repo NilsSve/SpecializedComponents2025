@@ -1,0 +1,173 @@
+﻿Use DFRptVw.pkg
+Use Windows.pkg
+
+Activate_View Activate_Resize03 For Resize03
+
+Object Resize03 is a ReportView
+    Set Label to "Resize Sample 3 / Progress Sentinel"
+    Set Location to 6 7
+    Set Size to 85 234
+    
+    // display current workspace to user when activating view
+    Procedure Activating
+        Forward Send Activating
+        
+        Send DisplayCurrentWorkspace
+    End_Procedure
+    
+    // display current workspace to user
+    Procedure DisplayCurrentWorkspace
+        String sCurrentWorkspace
+        
+        Get psCurrentWorkspace of oMain to sCurrentWorkspace
+        Set Value of oCurrentWorkspaceTextBox to ("Current Workspace: " + sCurrentWorkspace)
+    End_Procedure
+    
+    Object oResizeFactorForm is a Form
+        Set Label to "Resize factor:"
+        Set Size to 13 85
+        Set Location to 10 55
+        Set Label_Col_Offset to 2
+        Set Label_Justification_Mode to jMode_Right
+        Set psToolTip to "Multiplier used to adjust up DF_FILE_MAX_RECORDS for each table in workspace"
+    End_Object
+    
+    Object WorkSpaceBtn is a Button
+        
+        Set Label to "Select WorkSpace"
+        Set Size to 14 69
+        Set Location to 46 7
+        Set Status_Help to "Select a WorkSpace"
+        Set Default_State to TRUE
+        Set psToolTip to "Select workspace to have tables resized"
+        
+        Procedure OnClick
+            Send SelectWorkSpace
+            
+            // display current workspace to user after selecting a workspace
+            Send DisplayCurrentWorkspace
+        End_Procedure
+        
+    End_Object
+    
+    Object oOK_bn is a Button
+        
+        Set Label to "&OK"
+        Set Location to 67 126
+        Set psToolTip to "Apply Factor to all files in the filelist"
+        
+        // Augmented to get the entered resize factor and apply it
+        Procedure OnClick
+            Number nResizeFactor
+            
+            // Get the resize factor from the form
+            Get Value of (oResizeFactorForm(Self)) to nResizeFactor
+            
+            // If the factor makes sense, apply it, otherwise complain
+            If (nResizeFactor > 0.0) ;
+                Send ResizeFiles nResizeFactor
+            Else ;
+                Send Info_Box "Please enter a positive value." (Label(oMain(Self)))
+        End_Procedure
+        
+        // Resize all files in the filelist.
+        //
+        // Arguments:
+        //     Number nResizeFactor - The factor to use for resizing
+        Procedure ResizeFiles Number ResizeFactor
+            String sRootName
+            Integer iTableNum iMaxRecs iNumRecs iStructHandle iStatPan
+            Integer iNumTables iNumTablesAdjusted
+            Boolean FileisOpen
+            
+            // Start the status panel
+            Move (Status_Panel(Self)) to iStatPan
+            If iStatPan Begin
+                // Setup sentinel
+                //Set Sentinel_Name Of iStatPan To "prgssent"
+                
+                Send Initialize_StatusPanel of iStatPan "Resize tables" "Searching filelist" ""
+                Send Start_StatusPanel of iStatPan
+            End
+            
+            // Initialize the file number. We will start searching the fileist
+            // at this number
+            Move 0 to iTableNum
+            Move 0 to iNumTables
+            Move 0 to iNumTablesAdjusted
+            Repeat
+                // Get next used file number
+                Get_Attribute DF_FILE_NEXT_USED of iTableNum to iTableNum
+                If iTableNum Begin
+                    // Count the file
+                    Increment iNumTables
+                    
+                    // Skip Flexerrs
+                    Get_Attribute DF_FILE_ROOT_NAME of iTableNum to sRootName
+                    If (Uppercase(Trim(sRootName)) <> "FLEXERRS") Begin
+                        // Show file
+                        If iStatPan ;
+                            Send Update_StatusPanel of iStatPan ("Checking file" * sRootName)
+                        
+                        // Open the file exclusively, we may want to change it later.
+                        Open iTableNum Mode DF_EXCLUSIVE
+                        If (Found) ;
+                            Move True to FileIsOpen
+                        If not (Found) ;    
+                            Move False to FileIsOpen
+                        
+                        If FileIsOpen Begin
+                            Get_Attribute DF_FILE_MAX_RECORDS  of iTableNum to iMaxRecs
+                            Get_Attribute DF_FILE_RECORDS_USED of iTableNum to iNumRecs
+                            
+                            // Check factor
+                            If ((iMaxRecs > 1) And (iNumRecs > 1) And ((iNumRecs * ResizeFactor) > iMaxRecs)) Begin
+                                // Count the adjustment
+                                Increment iNumTablesAdjusted
+                                
+                                Move iTableNum to iStructHandle
+                                Structure_Start iStructHandle
+                                Set_Attribute DF_FILE_MAX_RECORDS of iStructHandle ;
+                                to (Integer(ResizeFactor * iMaxRecs))
+                                Structure_End iStructHandle DF_STRUCTEND_OPT_NONE "." (oMain(Self))
+                            End
+                            Else ;
+                                Close iTableNum
+                        End
+                    End
+                    Else Begin
+                        If iStatPan ;
+                            Send Update_StatusPanel of iStatPan ("Skip" * sRootName)
+                    End
+                End
+            Until (iTableNum = 0)
+            
+            // Stop progress messages
+            If iStatPan ;
+                Send Stop_StatusPanel of iStatPan
+            
+            // Show that you are ready
+            Send Info_Box ("Resize adjusted" * String(iNumTablesAdjusted) * "of" * String(iNumTables) * "tables")
+        End_Procedure
+        
+    End_Object
+    
+    Object oCancel_bn is a Button
+        
+        Set Label to "&Cancel"
+        Set Location to 67 179
+        
+        // Augmented to cancel the view
+        Procedure OnClick
+            Send Request_Cancel
+        End_Procedure
+        
+    End_Object
+    
+    Object oCurrentWorkspaceTextBox is a TextBox
+        Set Size to 50 14
+        Set Location to 35 7
+        Set Label to "Current Workspace: "
+    End_Object
+    
+End_Object

@@ -1,0 +1,8 @@
+#REPLACE FILE2 Dept
+#REPLACE Dept.Recnum |FN2,0
+#REPLACE Dept.Dept_Code |FS2,1
+#REPLACE Dept.Name |FS2,2
+#REPLACE Dept.Number_of_Empl |FN2,3
+#REPLACE Dept.Budget |FN2,4
+#REPLACE Dept.Comments |FS2,5
+#REPLACE Dept.Company_Code |FS2,6

@@ -1,0 +1,102 @@
+﻿//    Example code from https://unicode-org.github.io/icu/userguide/locale/examples.html#querying-locale
+//
+//    int32_t count;
+//    UChar result[100];
+//    int i = 0;
+//    UErrorCode status = U_ZERO_ERROR;
+//    count = uloc_countAvailable();
+//    for (i = 0; i < count; i++) {
+//        uloc_getDisplayName(uloc_getAvailable(i), "en_US", result, 100, &status);
+//         /* print result */
+//    }
+// Read more at https://unicode-org.github.io/icu/userguide/locale/#locale
+
+
+Define iICUResultBufferSize for 100
+Define iICUZero_Error for 0
+
+External_Function ICUcountAvailable "uloc_countAvailable_63" icuuc63.dll Returns Integer
+
+External_Function ICUgetAvailable "uloc_getAvailable_63" icuuc63.dll Integer iOffset Returns Pointer
+
+External_Function ICUgetDisplayName "uloc_getDisplayName_63" icuuc63.dll;
+                  String sLocaleID;
+                  String sLanguageToDisplayNameIn;
+                  Pointer ptResult;
+                  Integer iResultSize;
+                  Pointer ptErrorCode;
+                  Returns Integer
+
+Struct tLocales
+    String sLocaleCode
+    String sLocalDisplayName
+End_Struct
+
+
+Function GetListOfLocales String sLggToDisplayIn Returns tLocales[] 
+    tLocales[] ListOfLocales
+    UChar[iICUResultBufferSize] ucBuffer
+    Pointer ptResult ptErrorCode ptLocale
+    Integer iError iNumOfAvailables iCount iNameLength    
+
+    // buffer to store result, i.e. locale display name 
+    Move (AddressOf(ucBuffer)) to ptResult
+    // to store error code after calling getDisplayName
+    Move (AddressOf(iError)) to ptErrorCode
+    
+    Move (ICUcountAvailable()) to iNumOfAvailables
+    
+    For iCount from 0 to (iNumOfAvailables - 1)
+        Move (ICUgetAvailable(iCount)) to ptLocale
+        Move (PointerToString(ptLocale)) to ListOfLocales[iCount].sLocaleCode
+
+        // reset error code 
+        Move  iICUZero_Error to iError
+        
+        // get locale's DisplayName in the passed language      
+        Move (ICUgetDisplayName(ListOfLocales[iCount].sLocaleCode, sLggToDisplayIn, ptResult, iICUResultBufferSize, ptErrorCode)) to iNameLength
+        If ((iNameLength > 0) and (iError <= iICUZero_Error)) Begin
+            Move (PointerToWString(ptResult)) to ListOfLocales[iCount].sLocalDisplayName
+        End
+    Loop
+    
+    Function_Return ListOfLocales    
+End_Function
+
+
+Function ListOfLocalesForDefaultLgg Returns tLocales[]
+    tLocales[] ListOfLocales
+    String sCurLanguage
+    
+    Get_Attribute DF_LOCALE_CODE to sCurLanguage
+    Move (GetListOfLocales(Self, sCurLanguage)) to ListOfLocales
+    
+    Function_Return ListOfLocales
+End_Function
+
+
+Function GetListOfLocaleCodes String sLggToDisplayIn Returns String[] 
+    String[] ListOfLocaleCodes
+    Pointer ptLocale
+    Integer iNumOfAvailables iCount    
+
+    Move (ICUcountAvailable()) to iNumOfAvailables
+    
+    For iCount from 0 to (iNumOfAvailables - 1)
+        Move (ICUgetAvailable(iCount)) to ptLocale
+        Move (PointerToString(ptLocale)) to ListOfLocaleCodes[iCount]
+    Loop
+    
+    Function_Return ListOfLocaleCodes    
+End_Function
+
+
+Function ListOfLocaleCodesForDefaultLgg Returns String[]
+    String[] ListOfLocaleCodes
+    String sCurLanguage
+    
+    Get_Attribute DF_LOCALE_CODE to sCurLanguage
+    Move (GetListOfLocaleCodes(Self, sCurLanguage)) to ListOfLocaleCodes
+    
+    Function_Return ListOfLocaleCodes
+End_Function

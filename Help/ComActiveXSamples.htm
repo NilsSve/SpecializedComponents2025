@@ -1,0 +1,464 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=FrontPage.Editor.Document>
+<meta name=Generator content="Microsoft FrontPage 4.0">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./ComActiveXSamples_files/filelist.xml">
+<title>Com ActiveX Import Samples</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>John Tuohy</o:Author>
+  <o:LastAuthor>Dennis Piccioni</o:LastAuthor>
+  <o:Revision>19</o:Revision>
+  <o:TotalTime>96</o:TotalTime>
+  <o:Created>2000-08-02T23:40:00Z</o:Created>
+  <o:LastSaved>2002-10-31T20:15:00Z</o:LastSaved>
+  <o:Pages>2</o:Pages>
+  <o:Words>1112</o:Words>
+  <o:Characters>6342</o:Characters>
+  <o:Company>Data Access Corporation</o:Company>
+  <o:Lines>52</o:Lines>
+  <o:Paragraphs>12</o:Paragraphs>
+  <o:CharactersWithSpaces>7788</o:CharactersWithSpaces>
+  <o:Version>9.3821</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>0</w:DisplayVerticalDrawingGridEvery>
+  <w:UseMarginsForDrawingGridOrigin/>
+  <w:Compatibility>
+   <w:FootnoteLayoutLikeWW8/>
+   <w:ShapeLayoutLikeWW8/>
+   <w:AlignTablesRowByRow/>
+   <w:ForgetLastTabAlignment/>
+   <w:LayoutRawTableWidth/>
+   <w:LayoutTableRowsApart/>
+  </w:Compatibility>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:1472333841;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1380213566 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:2128425498;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1543047356 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:39.0pt;
+	mso-level-number-position:left;
+	margin-left:39.0pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l1:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:75.0pt;
+	mso-level-number-position:left;
+	margin-left:75.0pt;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1><a name="_top"></a>Com ActiveX Samples</h1>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>These samples show you how
+you can import and use ActiveX controls in your VDF applications. We’ve
+imported several common ActiveX controls and placed them in views. In all
+cases, these controls are imported using the IDE’s <i>Import ActiveX Control</i>
+option from the <i>Tools</i> Menu.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>We have created the
+following examples:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'><span
+     style='font-family:Arial'>A <a href="#_Calendar_Popup_Example">popup
+     calendar</a> selection panel.<o:p></o:p></span></li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'><span
+     style='font-family:Arial'>An <a href="#_Order_Entry_with">Order entry view
+     with a calendar</a> that can be used for data entry and display<o:p></o:p></span></li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'><span
+     style='font-family:Arial'>A view that lets you select and view or listen
+     to any <a href="#_Media_Player">media player file</a> (wav, mpg, mp3,
+     etc.) <o:p></o:p></span></li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'><span
+     style='font-family:Arial'>A view with an embedded <a
+     href="#_Internet_Explorer_Example">Internet Explorer browser</a></span></li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'><span style="font-family: Arial">A
+    view that allows you to connect to and work with an <a href="#_Simple_Automation_Controller_Example">Automation
+    Control</a></span><span
+     style='font-family:Arial'><o:p></o:p></span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>A couple of things to note
+about this import process:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:39.0pt;text-indent:-.25in;mso-list:l1 level1 lfo5;
+tab-stops:list 39.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-bidi-font-family:Arial'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>When an ActiveX control
+is imported it is also added to the IDE’s Controls Palette. In this sample
+we’ve added all of these controls to a control page named “ActiveX”. You can
+add these to any page you like.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:39.0pt;text-indent:-.25in;mso-list:l1 level1 lfo5;
+tab-stops:list 39.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-bidi-font-family:Arial'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>You can only import
+ActiveX classes when all IDE components are closed. Adding controls requires
+that the workspace’s class list get rebuilt. This can only occur when no
+classes are being used (i.e. there are no open components).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:39.0pt;text-indent:-.25in;mso-list:l1 level1 lfo5;
+tab-stops:list 39.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-bidi-font-family:Arial'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>When you import a class
+you are given the choice of placing it within a Global or Local (current workspace)
+repository. If you want a control to be available to all workspaces, select
+“Global”. For our sample, all classes have been placed in the current workspace
+area. While you are experimenting with this feature, you will probably want to
+place your controls in the Local area. Pay attention to this setting – it
+defaults to Local.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:39.0pt;text-indent:-.25in;mso-list:l1 level1 lfo5;
+tab-stops:list 39.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-bidi-font-family:Arial'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>A checkbox determines
+if an imported control should be data aware. Most controls will not be
+data-aware. You can use these controls to interact with your database but the
+interactions will have to be manually programmed. Making a control data aware
+gives it all of the capabilities of a VDF DEO object. The control will
+automatically interact with the data dictionaries just like the standard DEO
+classes do (e.g. dbForm).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>You can create a data
+aware control if the control can be used to represent a single data field value
+and the control supports the ability to get and set the value, and provides
+some kind of event notification when the control’s value is changed.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>When you create a data
+aware control, you need to complete a few “ToDo” items in the class before you
+can compile and use it. These usually involve simple changes. Basically, you
+need to tell the control how it should “shake hands” with DDO/DEO interface.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>We’ve created a data
+aware calendar control (cComDbCalendar). You can look at this to see how this
+is done. We have also created a non data aware Calendar control (cComCalendar).
+Although the control is not data aware, it is used in a data entry context – it
+is used to create a popup calendar selection panel.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:39.0pt;text-indent:-.25in;mso-list:l1 level1 lfo5;
+tab-stops:list 39.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-bidi-font-family:Arial'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>When a class is
+imported, the following occurs:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>The class package is created
+and placed in either Visual DataFlex 8.3\pkg (if global) or in the workspace’s
+AppSrc directory (if local).<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>A Bitmap file (bmp) and
+IDE Meta Class definition file (dfc) are placed in the IdeSrc directory. If
+global it is placed in usr\global\idesrc; if local, it is placed in the workspace
+IdeSrc directory. Non data aware classes also generate an object preference
+file (dfo) and place it in the appropriate IdeSrc directory.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>An entry for the class
+is added to the IDE’s class list.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:39.0pt;text-indent:-.25in;mso-list:l1 level1 lfo5;
+tab-stops:list 39.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-bidi-font-family:Arial'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>You can remove an
+imported class by carefully:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>Deleting the class from
+the IDE’s class list (<i>Tools / Maintain Classlist…</i>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>Deleting the pkg file
+from the appropriate pkg or AppSrc area.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>Deleting the dfc, bmp
+and dfo file from the appropriate IdeSrc area.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:75.0pt;text-indent:-.25in;mso-list:l1 level2 lfo5;
+tab-stops:list 75.0pt'><![if !supportLists]><span style='font-family:"Courier New"'>o<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='font-family:Arial'>You could also use this
+technique to move classes between the global and local areas.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'>All
+of the samples used here were imported within the IDE. Only one class was
+actually changed after import. The data aware cComDbCalendar class required
+customization. In addition, we trimmed the interface in this one class. Most of
+the time you will find that you only need to use a few methods supported by an
+ActiveX control. It is possible to import a class that contains hundreds of
+messages (or more) and you will only need to use one or two of these methods.
+If you wish, you can remove most of the unneeded methods from the class
+definition.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><a
+href="#_top">[Top]</a><o:p></o:p></span></p>
+
+<h2><a name="_Calendar_Popup_Example"></a>Calendar Popup Example</h2>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>For this sample, we import a
+non data aware calendar control. The control is placed in a lookup list. This
+can be used by any promptable VDF form (Form, dbForm, dbGrid) by setting the
+form’s prompt_object property to the popup’s object ID. This sample shows you
+how to coordinate moving data into and out of the calendar control. This popup
+control could be used by any view that needs a popup calendar.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Most of the code for this
+example is found in the lookup component DatePopup.sl.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><a
+href="#_top">[Top]</a><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<h2><a name="_Order_Entry_with"></a>Order Entry with Data Aware Calendar
+Control</h2>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>We imported the same
+calendar control but created a data aware class for this sample. After the
+class is created we needed to modify a couple of ToDo items in the class code
+allowing us to connect the ActiveX interface to the DEO interface. This
+requires changing two methods. Once implemented, this control can be used like
+any other IDE DEO data entry control. Just drop it in your view and connect it
+to a file and field.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The order entry view
+contains two entry objects for the same date field – a date entry spinform and
+the calendar control. You don’t need two controls. The calendar control could
+be used standalone. We used both controls to show how versatile the data aware
+ActiveX control is. When you change a date value in the spinform, the calendar
+is updated. When you change the date in the calendar, the spinform is updated.
+Also, notice that the calendar has all of the features you would expect of a
+DEO. It supports a prompt key, find keys, a save key and a delete key. It
+responds properly to tool bar buttons (find, clear, prompt, etc.) and it
+supports status help. All of this support is built right into the class.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Most of the code of interest
+in this sample is found in the imported class cComDbCalendar in the file
+cComDbCalendar.pkg. We have also included the unaltered class in the file
+cComDbCalendar-original.pkg so you can compare the two.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]><![endif]><o:p></o:p><a
+href="#_top">[Top]</a><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<h2><a name="_View_PDF_File"></a><a name="_Media_Player"></a>Media Player</h2>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This is a very simple view
+that lets you select and play media files. To use this all you have to do is to
+supply the control a file name. These types of controls can be imported and
+used within an application within minutes.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><a
+href="#_top">[Top]</a><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<h2><a name="_Internet_Explorer_Example"></a>Internet Explorer Example</h2>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This sample embeds the
+Microsoft Internet Explorer active control inside of a view. We create a form
+for selecting a URL, a button bar for handling the most common browser
+functions (forward, back, refresh, etc.) and a status panel at the bottom. The
+net result is a mini browser inside of a view. If you’ve got the WebApp Studio
+installed on your machine you can even run a WebApp application inside of your
+regular VDF application.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This is the most complicated
+of the “Com ActiveX” samples. No changes were made to the browser class cComWebBrowser
+(cComWebBrowser.pkg). If you look at the class you will see it has a big
+interface, mostly unused by our sample. This might be a good candidate for
+“interface trimming”.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><a
+href="#_top">[Top]</a></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'>&nbsp;</p>
+
+<h2><a name="_Simple_Automation_Controller_Example"></a>Simple Automation
+Controller Example</h2>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This sample shows how you can
+connect to and work with a Simple Automation Control. A good way to see this
+sample in action is to resize the COM Samples application so it takes up the
+left half of your screen, then click the 'Connect to Server&quot; button and
+move the Simple Automation Server that pops up to the other half of the screen,
+so that the Automation Server and the sample with the Simple Automation
+Controller view open are side by side.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Now you can change the
+settings, like 'Set Shape' and 'Set Color' and see them immediately take effect
+in the Simple Automation Server. You can also type text into the form next to
+the 'Set Text' button and click the 'Set Text' button to set the text displayed
+in the form in the Simple Automation Server. You can also retrieve the text back
+from the Automation Server by clicking the 'Get Text' button. Last, you can tell
+the Automation Server to display all of its current settings by clicking the
+'Show Server Info' button.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><a
+href="#_top">[Top]</a></span></p>
+
+<p class=MsoNormal style='margin-left:3.0pt'><span style='font-family:Arial'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

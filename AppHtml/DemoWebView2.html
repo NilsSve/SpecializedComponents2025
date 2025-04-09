@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>    
+    <head>
+        <title>WebView Test Page</title>
+        <style>
+            body
+            {
+                margin-left: 2em;
+                font-size: 10pt;
+                font-family: "Segoe UI";
+            }                
+            h1
+            {
+                margin-left: -0.8em;
+                color: #ffffff;
+                font-size: 1.7em;
+                background-color: #e54711;
+                font-family: "Segoe UI";
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
+                font-weight: normal;
+            } 
+            h2
+            {
+                margin-left: -0.8em;
+                border-top: 1px solid #000000;
+                padding-top: 0.4em;
+                font-size: 13pt;
+                font-family: "Segoe UI";
+                color: #e54711;
+            }                
+            h3
+            {
+                margin-left: -0.8em;
+                font-weight: bold;
+                font-size: 11pt;
+                font-family: "Segoe UI";
+            }                
+            .intro
+            {
+                margin-left: -0.8em;
+            }
+            .frmheader
+            {
+                background: #e54711;
+                padding-top: 0.1em;
+                padding-bottom: 0.2em;
+                font-size: 10pt;
+            }
+            .code
+            {
+                font-family: 'Courier New';
+                background-color: #ffeae5;
+                padding: 0.3em;
+                font-size: 10pt;
+            }
+            font.value
+            {
+
+                font: bold;
+                font-size: 10pt;
+            }
+            font.key
+            {
+
+                font: bold;
+                font-size: 10pt;
+            }
+            a {
+            color: #e54711;
+            }
+            a:hover {
+            color: #000000;
+            }
+            td
+            {
+                font-size: 9pt;
+            }
+            hr
+            {
+                margin-left: -0.8em;
+                border-top: 1px solid #000000;
+            }
+        </style>
+
+        <script>
+            function doLog(sLog){
+                const eLog = document.getElementById("log");
+                if(eLog){
+                    eLog.innerText = sLog + "\r\n" + eLog.innerText;
+                }
+            }
+            function calledOnInitialization(){
+                doLog("calledOnInitialization succesfully executed!");
+            }
+
+            function postMessage(){
+                const eMsgTxt = document.getElementById("message");
+                if(eMsgTxt && window.chrome.webview){
+                    window.chrome.webview.postMessage(eMsgTxt.value);
+                }
+            }
+
+            function postJSON(){
+                const eMsgTxt = document.getElementById("message");
+                if(eMsgTxt && window.chrome.webview){
+                    window.chrome.webview.postMessage({ "iVal": 1, "bVal" : true, "sVal" : eMsgTxt.value }) ;
+                }
+            }
+
+            window.chrome.webview.addEventListener('message', oEv =>{
+                doLog("Message received: " + oEv.data);
+            });
+
+            function openDemoWindow(){
+                var myWindow = window.open("", "MsgWindow", "width=200,height=100");
+                myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>"); 
+            }
+
+            function showConfirm(){
+                if(confirm("Are you sure you want to do this?")){
+                    doLog("Confirmed!");
+                }else{
+                    doLog("Unconfirmed!");
+                }
+            }
+
+            function showPrompt(){
+                var sValue = prompt("Enter a value below!", "Default..");
+                doLog("Prompt result:" + sValue);
+            }
+            
+            function queryClipboard(){
+                navigator.clipboard.readText()
+                    .then(text => {
+                        doLog('Pasted content: ' + text);
+                    })
+                    .catch(err => {
+                        doLog('Failed to read clipboard contents: ' + err);
+                    });
+            }
+
+            function queryResource(sName){
+                fetch('https://memresource.asset/' + sName,{
+                    method:'POST',
+                    headers: {
+                        'Content-Type' : 'text/plain'
+                    },
+                    body: ("Client says hi to " + sName + "!")
+                })
+                    .then((response) => response.text())
+                    .then((data) => doLog("WebResource Response: " + data));
+
+            }
+        </script>
+    </head>
+    <body>
+        <section>
+            <h1>WebView2Browser Demo</h1>
+            <p>This page is used to demonstrate the capabilities of the cWebView2Browser component. This component wraps the WebView2 browser engine from 
+                Microsoft into a reusable DataFlex control. WebView2 is based on Edge Chromium and has similar specifications. Use this control to display 
+                web pages or HTML snippets within your DataFlex Windows project. API's are available for two-way communication between the web page and the 
+                host application. The intend of this control is to replace the Internet Explorer based ComWebBrowser usage. Run the WebView2Browser.src 
+                project to see this component in action.</p>
+            
+            <h2>Callback messages</h2>
+            <p>Use the textarea and the buttons below to send messages to the host application. This is done using the <b>window.chrome.webview.postMessage</b> 
+                JavaScript API. This triggers the <b>OnWebMessageReceived</b> event on the DataFlex control.</p>
+            <textarea id="message">Message sent to DataFlex</textarea>
+            <button onclick="postMessage();">Post message</button>
+            <button onclick="postJSON();">Post JSON</button>
+            
+            <h2>Host messages</h2>
+            <p>The box below will show messages received from the host application via the webview message API or by direct JavaScript executions. Webview 
+                messages are sent using the <b>PostWebMessageAsString</b> or <b>PostWebMessageAsJsonHandle</b> DataFlex procedures. This triggers the message 
+                JavaScript event on the <b>window.chrome.webview</b> object. Direct JavaScript execution is done using the <b>ExecuteScript</b> or the 
+                <b>AddScriptToExecuteOnDocumentCreated</b> DataFlex procedures. </p>
+            <pre id="log" style="border: 1px dotted black;">
+                
+            </pre>
+
+            <h2>New Window</h2>
+            <p>The buttons below demonstrate the different options for handling popups from the page offered by the <b>OnNewWindowRequested</b> event. By default 
+                they are shown in a new WebView2 window but they can also be cancelled (by setting <b>bHandled</b> to true) and a custom popup can be made by 
+                creating a new instance of the cWebView2Browser and setting that to <b>hoNewWindow</b>. Use the combo below the browser to choose between no, custom 
+                and standard popups.</p>
+            <button onclick="window.open('DemoWebView2Popup.html', 'demo', 'width=500,height=400');">Open Demo Window</button>
+            <button onclick="window.open('https://support.dataaccess.com/');">Open Forums Window</button>
+            <button onclick="openDemoWindow();">Open JS Window</button>
+            <a href="https://www.dataaccess.com/" target="_blank">dataaccess.com</a>
+            <h2>Script dialogs</h2>
+            <p>The buttons below trigger various script dialogs. Depending on the value of <b>pbAreDefaultScriptDialogsEnabled</b> it will show the default browser dialog or trigger <b> OnScriptDialogOpening</b>. In this example we have implemented <b>OnScriptDialogOpening</b> to show a custom DataFlex popup.</p>
+            <button onclick="alert('Script dialog!');">Alert</button>
+            <button onclick="showConfirm();">Confirm</button>
+            <button onclick="showPrompt();">Prompt</button>
+            <h2>Permission</h2>
+            <p>The button below triggers a request to read the clipboard. To access the clipboard permission is required and the <b>OnPermissionRequested</b> event is triggered when this happens. This event allows the host application to implement custom permission rules. If the permission state is not altered in this event the WebView2 control will apply its own logic and eventually display its own dialog. Access to the camera, microphone, location and notifications can also be controlled via this API.</p>
+            <button onclick="queryClipboard();">Access clipboard</button>
+            
+            <h2>OnWebResourceRequested</h2>
+            <p>The button below will query a resource by sending an http request to https://memresource.asset/dummy.txt. A filter is set in DataFlex using <b>AddWebResourceRequestedFilter</b> which causes this request to be interceptable by the the <b>OnWebResourceRequested</b> event. Within this event we log data on the right hand console and return a response which is shown on the message log above.</p>
+            <button onclick="queryResource('dummy.txt');">WebResource Request</button>
+        </section>
+    </body>
+</html>

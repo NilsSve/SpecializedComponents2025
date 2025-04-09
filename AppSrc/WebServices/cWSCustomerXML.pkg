@@ -1,0 +1,122 @@
+﻿// cWSCustomerXML.pkg
+// Class:   cWSCustomerXML
+// Created: 11/8/2021 10:50:33.594 AM
+// 
+
+Use cClientWebService.pkg
+
+// 
+// Class:   cWSCustomerXML
+// 
+// Interface:
+// 
+// Function wsCustomerXMLList Returns Handle
+// Function wsDelCustomerXMLList Handle llCustomerList Returns Handle
+// 
+// 
+
+
+
+Class cWSCustomerXML is a cClientWebService
+
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psServiceLocation     to 'http://localhost/WebOrder_25_0/CustomerXML.wso'
+        Set psWSDLLocation        to 'http://localhost/WebOrder_25_0/CustomerXML.wso?WSDL'
+    End_Procedure
+
+    // 
+    // Function wsCustomerXMLList
+    // 
+    // Returns an XML document of all customers (Name, Number, State).
+    // 
+    Function wsCustomerXMLList Returns Handle
+        Handle llCustomerXMLListResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "CustomerXMLList"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "CustomerXMLListResponse"
+        Set pbResponseBare         to False
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsXmlElement 1 1 "CustomerXMLListResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llCustomerXMLListResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llCustomerXMLListResult
+    End_Function
+
+    // 
+    // Function wsDelCustomerXMLList
+    // 
+    // Passed a customer XML with delete atrributes. Deletes all customers and returns
+    // a new list.
+    // 
+    Function wsDelCustomerXMLList Handle llCustomerList Returns Handle
+        Handle llDelCustomerXMLListResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "DelCustomerXMLList"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "DelCustomerXMLListResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsXmlElement 1 1 "CustomerList" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llCustomerList to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsXmlElement 1 1 "DelCustomerXMLListResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llDelCustomerXMLListResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llDelCustomerXMLListResult
+    End_Function
+
+End_Class
+

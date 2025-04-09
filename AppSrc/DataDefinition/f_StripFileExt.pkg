@@ -1,0 +1,18 @@
+﻿
+//  Returns a filename without its extension.
+//  e.g. C:\TMP\STUFF.TXT will become C:\TMP\STUFF
+Function StripFileExt Global String sFile Returns String
+    Integer iPos
+    
+    If not (sFile contains '.') ;
+        Function_Return sFile //optimized
+    
+    Move (Length(sFile)) to iPos
+    While (iPos >0)
+        If ((Mid(sFile, 1, iPos)) = '.') ;
+            Break
+        Decrement iPos
+    Loop
+    
+    Function_Return (Left(sFile, iPos -1))
+End_Function

@@ -1,0 +1,257 @@
+﻿Use Windows.pkg
+Use InetTransfer.pkg
+
+Object oSelectFilename_dg is a ModalPanel
+    
+    Property String  psDirectory          // stores the CurrentDirectory of the FTP server
+    Property String  psFilename           // stores the chosen file
+    Property Integer phoSourceFtpTransfer // object-handle of a source oFtpTransfer to use
+    Property Integer pbSuccess            // indicates whether a file/directory was selected
+    Property Integer pbPickFile           // True if the user needs to pick a file, False if they need to pick a directory
+    
+    Register_Function GetFilename Returns String
+    
+    // Displays a directory listing of the Ftp's Current_Directory
+    Procedure DoDisplayDirectory
+        String sDirectory
+        
+        Send Delete_Data of oDirectories_ls // clear any existing files in the list
+        Get CurrentDirectory of oFtpTransfer To sDirectory
+        Set Value of oDirectory_fm To sDirectory // Display the Directory name above the list
+        Send Add_Item of oDirectories_ls msg_None ".." // always assume that they can navigate back up
+        
+        Send DirectoryList of oFtpTransfer "*.*"
+    End_Procedure
+    
+    // Try to Connect to the Host
+    Function GetConnectToHost Returns Integer
+        Integer bConnected
+        String sHost
+        
+        Get psRemoteHost of oFtpTransfer To sHost
+        Get Connect of oFtpTransfer To bConnected
+        If (bConnected) ;
+            Set Label to ("Directory List of: " +sHost)
+        Else ;
+            Send Stop_Box ("Connection To " +sHost +" has failed.") "Unable To Connect To FTP Server"
+        
+        Function_Return bConnected
+    End_Function
+    
+    // Attempts to change directory.
+    // The result is a boolean indication a successful change of directory
+    Function GetChangeDirectory String sDirectory Returns Boolean
+        Boolean bChanged
+        
+        If (sDirectory="") ;
+            Function_Return True
+        Get ChangeDirectory of oFtpTransfer sDirectory To bChanged
+        If (bChanged=False) Begin
+            Send Stop_Box ('Unable to access the "' +sDirectory +'" directory.') 'Cannot Change Directory'
+        End
+        Function_Return bChanged
+    End_Function
+    
+    // ===INTERFACE METHOD===
+    // Allows the user to select a file in a directory.
+    // The return value is a boolean indicating whether a file was selected.
+    Function GetSelect Integer bPickFile Integer hoSourceFtpTransfer String sDirectory Returns Boolean
+        Boolean bIsConnected bIsDirectoryValid
+        
+        // Store the source FtpTransfer instance handle, so that we can copy to/from it
+        Set phoSourceFtpTransfer To hoSourceFtpTransfer
+        
+        // initialize oFtpTransfer to be a clone of the source cFtpTransfer instance
+        Send DoClone of oFtpTransfer hoSourceFtpTransfer
+        
+        // Assume that no file was selected. This property will be read... NEEDED???
+        Set pbSuccess            To False
+        
+        // The dialog is used to select a File
+        Set pbPickFile           To bPickFile
+        
+        // Try to connect to the Host
+        Get GetConnectToHost To bIsConnected
+        If (bIsConnected) Begin
+            // try to change to desired starting directory...
+            Get GetChangeDirectory sDirectory To bIsDirectoryValid
+            If (bIsDirectoryValid) Begin
+                Send DoDisplayDirectory
+                Send Popup
+                If (pbSuccess(self)) Begin
+                    Set psDirectory To (CurrentDirectory(oFtpTransfer(self)))
+                    Set psFilename  To (GetFilename(self))
+                End
+            End
+            
+            // Now disconect
+            Get Disconnect of oFtpTransfer To bIsConnected
+        End
+        Function_Return (pbSuccess(self))
+    End_Function
+    
+    // Returns the name of the current item. This is assumed to be a directory.
+    // Use the IsDirectory function method to ensure this.
+    Function GetDirectory Returns String
+        Integer iCurrentItem
+        String sDirectory
+        
+        Get Current_Item of oDirectories_ls To iCurrentItem
+        Get Value of oDirectories_ls iCurrentItem To sDirectory
+        Move (Replace (" [Directory]", sDirectory,  "")) To sDirectory
+        
+        Function_Return sDirectory
+    End_Function
+    
+    // Returns the name of the file of the current item.
+    // Use the IsDirectory function method to ensure this item is not a directory.
+    Function GetFilename Returns String
+        Integer iCurrentItem iPos
+        String sFilename
+        
+        Get Current_Item of oDirectories_ls To iCurrentItem
+        Get Value of oDirectories_ls iCurrentItem To sFilename
+        Move (Pos(" [Size", sFilename)) To iPos
+        
+        Function_Return (Left(sFilename, iPos -1))
+    End_Function
+    
+    // Returns True if the current item is a directory
+    Function IsItemDirectory Returns Boolean
+        Integer iCurrentItem
+        String sDirectory
+        
+        Get Current_Item of oDirectories_ls To iCurrentItem
+        Get Value of oDirectories_ls iCurrentItem To sDirectory
+        
+        Function_Return ( (sDirectory contains " [Directory]") or (sDirectory ="..") )
+    End_Function
+    
+    // Returns True if the current item is ".."
+    Function IsParentDirectory Returns Boolean
+        Integer iCurrentItem
+        String sDirectory
+        
+        Get Current_Item of oDirectories_ls To iCurrentItem
+        Get Value of oDirectories_ls iCurrentItem To sDirectory
+        
+        Function_Return ( (sDirectory ="..") )
+    End_Function
+    
+    Set Label to "Select Directory on Host"
+    Set Location to 5 8
+    Set Size to 193 271
+    
+    Object oDirectory_fm is a Form
+        Set Label to "Dir:"
+        Set Size to 13 241
+        Set Location to 2 25
+        Set Label_Col_Offset to 2
+        Set Label_Justification_Mode to jMode_Right
+        Set Enabled_State To False
+    End_Object
+    
+    Object oDirectories_ls is a List
+        Set Size to 152 257
+        Set Location to 19 9
+        
+        Procedure Activate
+            Forward Send Activate
+            Send OnChange
+        End_Procedure
+        
+        Procedure Mouse_Click Integer iWin Integer iChar
+            Integer bChangedDirectory
+            String sDirectory
+            
+            Forward Send Mouse_Click iWin iChar
+            
+            // If item is a directory, try to switch to it...
+            If (IsItemDirectory(Self)) Begin
+                Get GetDirectory To sDirectory
+                Get GetChangeDirectory sDirectory To bChangedDirectory
+                If (bChangedDirectory) Begin
+                    Send DoDisplayDirectory sDirectory
+                    Send OnChange
+                End
+            End
+        End_Procedure
+        
+        Procedure OnChange
+            If (pbPickFile(self)) Begin
+                Set Enabled_State of oOk_bn to (IsItemDirectory(Self)=False)
+            End
+            Else Begin
+                If (IsParentDirectory(Self)) ;
+                    Set Enabled_State of oOk_bn to False
+                Else ;
+                    Set Enabled_State of oOk_bn to (IsItemDirectory(Self))
+            End
+        End_Procedure
+        
+    End_Object
+    
+    Object oOK_bn is a Button
+        Set Label to "&OK"
+        Set Location to 175 163
+        
+        Procedure OnClick
+            Integer bValidDirectory
+            
+            // If a directory is required, ensure that we have access to it:
+            If (pbPickFile(Self) = False) Begin
+                Get GetChangeDirectory (GetDirectory(Self)) To bValidDirectory
+                If (bValidDirectory = False) ;
+                    Procedure_Return
+            End
+            
+            Set pbSuccess To True // The user made a valid selection
+            Send Close_Panel // now close the dialog
+        End_Procedure
+        
+    End_Object
+    
+    Object oCancel_bn is a Button
+        Set Label to "&Cancel"
+        Set Location to 175 216
+        
+        Procedure OnClick
+            Send Close_Panel // the user clicked the CANCEL button, so close the dialog
+        End_Procedure
+        
+    End_Object
+    
+    Object oFtpTransfer is a cFtpTransfer
+        Set psUsername to ""
+        
+        Procedure OnDirectoryList String sFilename Integer iFileSize Integer iAttributes
+            String sAttributes
+            
+            Move "" To sAttributes
+            If (iAttributes iand faDirectory) ;
+                Move " [Directory]" to sAttributes
+            Else Begin
+                Move (" [Size: " +String(iFileSize) +"]") To sAttributes
+            End
+            Send Add_Item of oDirectories_ls msg_None (sFilename +sAttributes)
+        End_Procedure
+        
+        // Copies the properties of the Source cFtpTransfer instance
+        Procedure DoClone Integer hoFtpTransfer
+            Set psUserName     to (psUserName(hoFtpTransfer))
+            Set psPassword     to (psPassword(hoFtpTransfer))
+            Set psRemoteHost   to (psRemoteHost(hoFtpTransfer))
+            Set piRemotePort   to (piRemotePort(hoFtpTransfer))
+            Set psProxy        to (psProxy(hoFtpTransfer))
+            Set piBufferSize   to (piBufferSize(hoFtpTransfer))
+            Set peTransferType to (peTransferType(hoFtpTransfer))
+            Set pbPassiveMode  to (pbPassiveMode(hoFtpTransfer))
+        End_Procedure
+        
+    End_Object
+    
+    On_Key Key_Alt+Key_O Send KeyAction of oOk_bn
+    On_Key Key_Alt+Key_C Send KeyAction of oCancel_bn
+    
+End_Object
+

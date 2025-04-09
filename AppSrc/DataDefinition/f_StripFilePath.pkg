@@ -1,0 +1,35 @@
+﻿// f_StripFilePath.pkg
+
+// Strip the path of a file path. Returns only the last name in the path.
+// e.g. StripFilePath('c:\Fred\Blogs\MyFile.txt') returns 'MyFile.txt'
+// See also ExtractFilePath()
+Function StripFilePath Global String sFilePath Returns String
+    String  sFileName
+    String  sChar
+    String  sDirSeparator
+    Integer iCount
+    Boolean bReady
+    
+    Move (SysConf(SYSCONF_DIR_SEPARATOR)) to sDirSeparator
+    Move (Length(sFilePath)) to iCount
+    Move False               to bReady
+    
+    While ((iCount > 0) and (not(bReady)))
+        Mid sFilePath to sChar 1 iCount
+        
+        If (sChar = sDirSeparator) Begin
+            Move True to bReady
+        End
+        Else Begin
+            Decrement iCount
+        End
+    Loop
+    Move (Right(sFilePath, (Length(sFilePath) - iCount))) to sFileName
+    
+    //*** Check if driver/driver separator still in name
+    If (Pos(":", sFileName) <> 0) ;
+        Move (Right(sFileName, Length(sFileName) - Pos(":", sFileName))) to sFileName
+    
+    Function_Return sFileName
+End_Function
+

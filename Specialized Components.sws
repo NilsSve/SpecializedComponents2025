@@ -1,0 +1,26 @@
+[Properties]
+Version=25.0
+[WorkspacePaths]
+ConfigFile=.\Programs\Config.ws
+[Libraries]
+Lib1=..\Libraries\Example Library\Example Library.sws
+[Conditionals]
+Is$WebApp=False
+Is$Win64=True
+
+
+[Projects]
+Project0=Alias\AliasTableExample.src
+Project1=COM\ComSamples.src
+Project2=DataDefinition\DataDefinition.src
+Project3=Grids\Grids.src
+Project4=InetTransfers\InetTransfers.src
+Project5=OrderGenerator\OrderGeneratorTester.src
+Project6=RichEdit\RichEditApp.src
+Project7=SplitterAndScrolling\Splitters and Scrolling Containers.src
+Project8=Treeview\Treeview.src
+Project9=WebAppLog\WebAppLogReader.src
+Project10=WebServices\WebServicesClients.src
+Project11=WebView2\WebView2Browser.src
+Project12=XML\XML-Sample.src
+Project13=Collate\ShowCollate.src

@@ -1,0 +1,37 @@
+﻿Use cCJStandardMenuItemClasses.pkg
+
+Object oDisabledContextMenu is a cCJContextMenu
+        
+    Object oUndoMenuItem is a cCJUndoMenuItem
+        Function IsEnabled Returns Boolean
+           Function_Return False
+        End_Function
+    End_Object
+    
+    Object oCutMenuItem is a cCJCutMenuItem
+        Set pbControlBeginGroup to True
+        Function IsEnabled Returns Boolean
+           Function_Return False
+        End_Function
+    End_Object
+    
+    Object oCopyMenuItem is a cCJCopyMenuItem
+    End_Object
+
+    Object oPasteMenuItem is a cCJPasteMenuItem
+        Function IsEnabled Returns Boolean
+           Function_Return False
+        End_Function
+    End_Object
+
+    Object oDeleteItem is a cCJDeleteEditMenuItem
+        Function IsEnabled Returns Boolean
+           Function_Return False
+        End_Function
+    End_Object
+
+    Object oSelectAllMenuItem is a cCJSelectAllMenuItem
+        Set pbControlBeginGroup to True
+    End_Object
+
+End_Object  

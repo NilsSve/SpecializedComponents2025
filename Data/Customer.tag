@@ -1,0 +1,14 @@
+Customer_Number
+Name
+Address
+City
+State
+Zip
+Phone_Number
+Fax_Number
+Email_Address
+Credit_Limit
+Purchases
+Balance
+Comments
+Status

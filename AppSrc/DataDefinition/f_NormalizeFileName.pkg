@@ -1,0 +1,37 @@
+﻿// f_NormalizeFileName.pkg
+// -----------------------
+
+// GetLongPathName
+// ---------------
+// converts the specified path to its long form. The short file name is limited to MAX_PATH characters.
+#IFDEF Get_GetLongPathName
+#ELSE
+External_Function GetLongPathName "GetLongPathNameA" Kernel32.dll ;
+Pointer lpsShortFileName ;
+Pointer lpsLongFileName ;
+Integer iBufferSize ;
+Returns DWord
+#ENDIF
+
+// Converts short (8-char) filenames to long filenames. eg
+// c:\Progra~1\DataFlex~1\Pkg\Windows.pkg -- > c:\Program Files\DataFlex\Pkg\Windows.pkg.
+Function NormalizeFileName Global String sFileName Returns String
+    String  sConvertedFileName
+    Pointer lpsFileName lpsConvertedFileName
+    Integer icChar
+    
+    // First convert the file to a short filename. This forces the GetLongPathName function
+    // to perform a conversion. Otherwise filenames that are already long would not get converted.
+    Move (Repeat(Character(0), 4096))    to sConvertedFileName
+    Move (AddressOf(sConvertedFileName)) to lpsConvertedFileName
+    Move (GetLongPathName(AddressOf(sFileName), lpsConvertedFileName, 4096)) to icChar
+    
+    // Test if GetFullPathName succeded....
+    If (icChar <> 0) Begin
+        Function_Return (CString(sConvertedFileName))
+    End
+    Else Begin
+        // if it failed return the filename unchanged....
+        Function_Return sFileName
+    End
+End_Function

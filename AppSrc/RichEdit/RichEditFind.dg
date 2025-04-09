@@ -1,0 +1,105 @@
+﻿Use Windows.pkg
+
+Object oRichEditFind is a ModalPanel
+    
+    On_Key Key_Alt+Key_F send KeyAction of oFindButton
+    On_Key Key_Alt+Key_C send KeyAction of oCancelButton
+    
+    // handle of invoking object (RichEdit control)
+    Property handle phoControl
+    
+    Set Border_Style to Border_Thick
+    Set Label to "Find"
+    Set Location to 6 4
+    Set Size to 73 218
+    Set piMaxSize to 73 1000
+    Set piMinSize to 73 218
+    
+    Object oSearchText is a Form
+        Set Label to "What:"
+        Set Size to 13 123
+        Set Location to 9 28
+        Set peAnchors to anTopLeftRight
+        Set Label_Col_Offset to 0
+        Set Label_Justification_Mode to jMode_Right
+    End_Object
+    
+    Object oFindButton is a Button
+        Set Label to "&Find"
+        Set Location to 9 158
+        Set peAnchors to anBottomRight
+        Set Default_State to TRUE
+        
+        Procedure OnClick
+            integer eSearchOptions
+            boolean bMatchWholeWord bMatchCase bStartAtTop
+            string sSearchText
+            handle hoControl
+            
+            get phoControl of oRichEditFind to hoControl
+            
+            get Value of oSearchText to sSearchText
+            get Checked_State of oStartAtTop to bStartAtTop
+            
+            get Checked_State of oMatchWholeWord to bMatchWholeWord
+            get Checked_State of oMatchCase to bMatchCase
+            
+            if ((bMatchWholeWord = True) AND (bMatchCase = True)) ;
+                move (FR_WHOLEWORD + FR_MATCHCASE) to eSearchOptions
+            else if ((bMatchWholeWord = True) AND (bMatchCase = False)) ;
+                move FR_WHOLEWORD to eSearchOptions
+            else if ((bMatchWholeWord = False) AND (bMatchCase = True)) ;
+                move FR_MATCHCASE to eSearchOptions
+            else ;
+                move 0 to eSearchOptions
+            
+            // start at top of control?
+            if (bStartAtTop = True) begin
+                send Beginning_of_Data of hoControl
+                // turn this off after first find
+                set Checked_State of oStartAtTop to False
+            end
+            
+            Send DoSearch of hoControl sSearchText eSearchOptions
+        End_Procedure
+        
+    End_Object
+    
+    Object oMatchWholeWord is a CheckBox
+        Set Label to "Match Whole Word"
+        Set Size to 10 79
+        Set Location to 26 12
+    End_Object
+    
+    Object oMatchCase is a CheckBox
+        Set Label to "Match Case"
+        Set Size to 10 55
+        Set Location to 40 12
+    End_Object
+    
+    Object oStartAtTop is a CheckBox
+        Set Label to "Start at Top of Control"
+        Set Size to 10 86
+        Set Location to 54 12
+    End_Object
+    
+    Object oCancelButton is a Button
+        Set Label to "&Close"
+        Set Location to 47 158
+        Set peAnchors to anBottomRight
+        
+        Procedure OnClick
+            Send Close_Panel
+        End_Procedure
+        
+    End_Object
+    
+    // store handle of invoking object on startup
+    Procedure DoSearch handle hoControl
+        set phoControl to hoControl
+        
+        send Popup_Modal
+    End_Procedure
+    
+End_Object
+

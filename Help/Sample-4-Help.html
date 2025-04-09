@@ -1,0 +1,456 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./Sample-4-help_files/filelist.xml">
+<title>This is the file that will tell you how do make everything work</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>John Tuohy</o:Author>
+  <o:LastAuthor>John Tuohy</o:LastAuthor>
+  <o:Revision>11</o:Revision>
+  <o:TotalTime>443</o:TotalTime>
+  <o:Created>2000-06-28T14:57:00Z</o:Created>
+  <o:LastSaved>2000-07-19T15:56:00Z</o:LastSaved>
+  <o:Pages>3</o:Pages>
+  <o:Words>1103</o:Words>
+  <o:Characters>6289</o:Characters>
+  <o:Company>Data Access Corp</o:Company>
+  <o:Lines>52</o:Lines>
+  <o:Paragraphs>12</o:Paragraphs>
+  <o:CharactersWithSpaces>7723</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:172884612;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1317942006 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:181167394;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1256479628 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l2
+	{mso-list-id:983463100;
+	mso-list-type:hybrid;
+	mso-list-template-ids:948835362 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l3
+	{mso-list-id:1319336602;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2061453848 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p class=MsoNormal><a name="_top"></a>Tell me about the other samples: <a
+href="Sample-1-help.html">[XML Sample-1]</a> <a href="Sample-2-help.html">[XML-Sample-2]</a>
+<a href="Sample-3-help.html">[XML-Sample-3]</a> <a href="Sample-5-help.html">[XML-Sample-5]</a></p>
+
+<h1>XML Sample-4 </h1>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This sample will show you how to use XML to write data from
+database tables to an XML file. In all of these examples we will be using
+low-level database access. In other words, these samples do not go through the
+data-dictionaries. </p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This sample has three sub-samples. Each of these uses the
+same options. You can:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'>Erase
+     the existing XML file. We did this so you can run these samples over and
+     over.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'>Run
+     the process that generates the XML file. This is, of course, the most
+     important part of the sample and will be the part of the code that you
+     will want to study. This is mostly a non-visual process (which makes it a
+     little hard to present as part of a visual example).</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'>View
+     the XML file. We view the XML file using an embedded Microsoft IE5
+     web-browser. The IE5 browser displays XML data in a simple tree view. This
+     display is not very exciting nor is it very useful. This is certainly not
+     the reason you use XML. However, it will let you see what is happening.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'>Output
+     data as encoded text or CDATA. When you output XML data you run this risk
+     of outputting values that will be misinterpreted by the XML parser. For
+     example the Text “an XML tag looks like this &lt;Tag&gt;…&lt;/Tag&gt;” is
+     going to confuse the parser. In HTML you avoid this be encoding the text<span
+     style="mso-spacerun: yes">  </span>(replacing the markup symbols with
+     special codes).<span style="mso-spacerun: yes">  </span>We will not have
+     to worry about this with these XML classes.<span style="mso-spacerun:
+     yes">  </span>They do this encoding for you automatically. You can also
+     choose to place the data in a CDATA section. The XML parser knows that
+     data inside of a CDATA section should not be parsed. Actually all a CDATA
+     section does is to place the text inside of markers that you are quite
+     unlikely to ever use. You can try this technique out as well.</li>
+</ul>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>There are three sub-samples here</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo6;tab-stops:list .5in'><a
+     href="#_Write_Single_Files">Write Single Files to XML #1</a></li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo6;tab-stops:list .5in'><a
+     href="#_Write_Single_Files_1">Write Single Files to XML #2</a></li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo6;tab-stops:list .5in'><a
+     href="#_Write_related_Files">Write Related Files to XML</a></li>
+</ul>
+
+<h2><a name="_Write_Single_Files"></a>Write Single Files to XML #1</h2>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This writes all data from selected data files to an XML
+document. In this case the selected files are all of the files in the order
+entry example (Customer, SalesP, OrderHea, OrderDtl, Invt and Vendor). </p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>The process is simple, for each file we use the API commands
+to read a record and then step through all fields in the record and output the
+field’s name and data. The resulting XML structure will look like this:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>&lt;Tables&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>&lt;Table&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:2'>                        </span>Attribute:
+Name=<i>Name-of-Table</i></p>
+
+<p class=MsoNormal><span style='mso-tab-count:2'>                        </span>Attribute:
+File=<i>File number</i></p>
+
+<p class=MsoNormal><span style='mso-tab-count:2'>                        </span>&lt;Row&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:3'>                                    </span>&lt;Field&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:4'>                                                </span>Attribute:
+field-number=<i>Field-number</i></p>
+
+<p class=MsoNormal><span style='mso-tab-count:4'>                                                </span>Attribute:
+Name=<i>Name-of-field</i></p>
+
+<p class=MsoNormal><span style='mso-tab-count:4'>                                                </span>Text
+or CDATA: <i>field value</i><span style='mso-tab-count:1'>    </span></p>
+
+<p class=MsoNormal>This looks something like this</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'>&lt;Tables xmlns="http://www.dataaccess.com/Tables"&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">        </span>&lt;Table
+Name=&quot;CUSTOMER&quot; File=&quot;25&quot;&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">               
+</span>&lt;Row&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">                       
+</span>&lt;Field Field-number=&quot;1&quot;
+Name=&quot;CUSTOMER_NUMBER&quot;&gt;1&lt;/Field&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">                   </span><span
+style="mso-spacerun: yes">     </span>&lt;Field Field-number=&quot;2&quot;
+Name=&quot;NAME&quot;&gt;Data Access Worldwide&lt;/Field&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>A couple of extras are added to this sample:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo9;tab-stops:list .5in'>You
+     write the data out as encoded text or CDATA. The sample shows both
+     techniques</li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo9;tab-stops:list .5in'>You
+     set and use default namespace in the XML file and you can see how to 
+     search for existing value when using namespaces</li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo9;tab-stops:list .5in'>You
+     can write to a new XML file or edit an existing XML file.</li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo9;tab-stops:list .5in'>Before
+     writing a table, the program checks to see if the XML document already has
+     data for this table. If it does, it lets you choose to skip the table or
+     replace it. This shows several useful techniques. It shows how to use search
+     patterns to look for data in an XML document, and it shows how to remove a
+     node from an XML document</li>
+</ul>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Throughout this sample and throughout all of the samples
+notice that we carefully destroy every object that we create. XML uses objects
+very dynamically and it is important that you manage them correctly. If you
+don’t, you may end up with many unused and unusable objects in your application.
+When you destroy a parent object (like the main XML object) the system will
+destroy all child objects. But this is not a good programming practice.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Also, make sure you understand that destroying a node
+(object) does not destroy the data in the XML document. The node that is
+destroyed is the object that provides access to a part of<span
+style="mso-spacerun: yes">  </span>your XML. This is similar to data files.
+Closing a file or clearing a buffer does not change the data in your data file.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><a href="#_top">Back to Top<span style='mso-bookmark:_Write_Single_Files_1'></span></a><![if !supportNestedAnchors]><a
+name="_Write_Single_Files_1"></a><![endif]></p>
+
+<h2>Write Single Files to XML #2</h2>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This sample is just like sample 1 except it formats the XML
+structure a little differently. There is no right or wrong way to format XML
+data. You just need to make sure that all sources using the data agree to
+create and interpret the data the same way.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>The data in sample two is formatted as:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>&lt;Tables&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>&lt;<i>Name-of-Table</i>&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:2'>                        </span>Attribute:
+File=<i>File-number</i></p>
+
+<p class=MsoNormal><span style='mso-tab-count:2'>                        </span>&lt;Row&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:3'>                                    </span>&lt;<i>Name-of-Field</i>&gt;</p>
+
+<p class=MsoNormal><span style='mso-tab-count:4'>                                                </span>Attribute:
+field-number=<i>Field-number</i></p>
+
+<p class=MsoNormal><span style='mso-tab-count:4'>                                                </span>Text
+or CDATA: <i>field value</i><span style='mso-tab-count:1'>    </span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>It<span style="mso-spacerun: yes">  </span>looks like this:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes"> </span>&lt;Tables xmlns="http://www.dataaccess.com/Tables&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">        </span>&lt;CUSTOMER
+File=&quot;25&quot;&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">               
+</span>&lt;!--Add all records for CUSTOMER--&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">               
+</span>&lt;Row&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">                       
+</span>&lt;CUSTOMER_NUMBER
+Field-number=&quot;1&quot;&gt;1&lt;/CUSTOMER_NUMBER&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">                       
+</span>&lt;NAME Field-number=&quot;2&quot;&gt;Data Access
+Worldwide&lt;/NAME&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">                       
+</span>&lt;ADDRESS Field-number=&quot;3&quot;&gt;14000 SW 119
+Ave&lt;/ADDRESS&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;mso-bidi-font-size:12.0pt;
+font-family:Arial'><span style="mso-spacerun: yes">                       
+</span>&lt;CITY Field-number=&quot;4&quot;&gt;Miami&lt;/CITY&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><a name="_Write_related_Files"></a><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>The second sample is a bit more readable and is more
+specifically customized for each Table. Each Table would end up with its own
+unique set of tags. The first example uses the same tags for all files – only
+the data changes. The advantage of the first method would be you could create a
+schema to define rules for these documents (you know what the tags will be). You
+could not do this with the second sample.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><a href="#_top">Back to Top</a></p>
+
+<h2>Write Related Files to XML</h2>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This outputs an XML file with data for all orders. For every
+order, <i>all</i> data for the order table, each order’s parent records
+(customer and salesp), all details for the order, and all tables that relate to
+the detail record (Invt and vendor) are written to an XML document. </p>
+
+<p class=MsoNormal>We are taking our data and de-normalizing it – each order
+contains all of the information about that order.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This is an important sample in that it very clearly shows
+that XML data does not need to have (and will rarely have) a one-to-one
+relationship with your data files. Do not think of XML as another database file
+- it's not! XML represents a method for transferring data between sources.
+Don't assume that the two sources will use the data the same way (i.e. don't
+assume that both sources are DataFlex applications that store data in databases).
+The whole point of XML is not to worry about this and not to restrict its uses.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This is all done at a low level using DataFlex file commands
+(no DDs). Notice how easy it is to write a program that extracts all data and
+writes it to an XML document. This technique could be used for any file.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Although this sample uses multiple files and writes to a
+more complex XML structure the method for creating an XML document remains the
+same. Generally this involves the following:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo12;tab-stops:list .5in'>Create
+     an XML document object returning a handle to this object</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo12;tab-stops:list .5in'>Load
+     the XML document (if this is not a new document)</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo12;tab-stops:list .5in'>Get
+     or create the Document Element node and get a handle to it.</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo12;tab-stops:list .5in'>Add
+     data to the document. If you send messages that returns object handles you
+     are creating new objects. You must remember to destroy the objects.</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo12;tab-stops:list .5in'>Save
+     the XML document. You can resave this, or save it as a new document.</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo12;tab-stops:list .5in'>Destroy
+     the Document Element and the main XML objects.</li>
+</ol>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><a href="#_top">Back to Top</a></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+</div>
+
+</body>
+
+</html>

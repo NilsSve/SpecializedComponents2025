@@ -1,0 +1,535 @@
+﻿// cWSCustomerAndOrderInfo.pkg
+// Class:   cWSCustomerAndOrderInfo
+// Created: 11/8/2021 10:39:59.603 AM
+// 
+
+Use cClientWebService.pkg
+
+
+// Structs used by web service
+
+Struct tWStCustAddress
+    String     sCustAddress
+    String     sCity
+    String     sState
+    String     sZip
+End_Struct
+
+
+Struct tWStNewCustomer
+    String             sFirstName
+    String             sMiddleName
+    String             sLastName
+    tWStCustAddress    Address
+    String             sPhoneNumber
+    String             sFaxNumber
+    String             sEmailAddress
+End_Struct
+
+
+Struct tWStCustomerInfo
+    Integer    iCustNumber
+    String     sName
+    String     sCustAddress
+    String     sCity
+    String     sState
+    String     sZip
+    String     sPhoneNumber
+    String     sFaxNumber
+    String     sEmailAddress
+    Real       rCreditLimit
+    Real       rPurchases
+    Real       rBalance
+    String     sComments
+    String     sStatus
+End_Struct
+
+
+Struct tWStOrderDet
+    String     sItemID
+    Integer    iQty
+    Real       rUnitPrice
+    Real       rPrice
+End_Struct
+
+
+Struct tWStOrder
+    Integer           iOrderNumber
+    Integer           iCustNumber
+    Date              dOrdDate
+    String            sTerms
+    String            sShipVia
+    String            sOrderedBy
+    String            sSalesPerson
+    Real              rOrderTotal
+    tWStOrderDet[]    ArrayOfDetails
+End_Struct
+
+
+Struct tWStOrderSummary
+    Integer    iOrderNumber
+    Date       dOrderDate
+    Real       rOrderTotal
+End_Struct
+
+// 
+// Class:   cWSCustomerAndOrderInfo
+// 
+// Interface:
+// 
+// Function wsGetOrdersForCustomer Integer lliCustNum Returns Integer[]
+// Function wsChangeCustomerAddress Integer lliCustNum tWStCustAddress llNewCustomerAddress Returns Boolean
+// Function wsCreateNewCustomer tWStNewCustomer llNewCustomer Returns Integer
+// Function wsGetCustomerInfo Integer lliCustNum Returns tWStCustomerInfo
+// Function wsGetCustomerInfoList Returns tWStCustomerInfo[]
+// Function wsGetOrderSummaryForCustomer Integer lliCustNum Returns tWStOrderSummary[]
+// Function wsGetOrderInfo Integer lliOrdNum Returns tWStOrder
+// 
+// 
+
+
+
+Class cWSCustomerAndOrderInfo is a cClientWebService
+
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psServiceLocation     to 'http://localhost/WebOrder_25_0/CustomerAndOrderInfo.wso'
+        Set psWSDLLocation        to 'http://localhost/WebOrder_25_0/CustomerAndOrderInfo.wso?WSDL'
+
+        Object oWStCustAddress is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Send DefineParameter xsString 1 1 "sCustAddress"
+            Send DefineParameter xsString 1 1 "sCity"
+            Send DefineParameter xsString 1 1 "sState"
+            Send DefineParameter xsString 1 1 "sZip"
+        End_Object
+
+        Object oWStNewCustomer is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Send DefineParameter xsString 1 1 "sFirstName"
+            Send DefineParameter xsString 1 1 "sMiddleName"
+            Send DefineParameter xsString 1 1 "sLastName"
+            Send DefineStructParameter oWStCustAddress 1 1 "Address"
+            Send DefineParameter xsString 1 1 "sPhoneNumber"
+            Send DefineParameter xsString 1 1 "sFaxNumber"
+            Send DefineParameter xsString 1 1 "sEmailAddress"
+        End_Object
+
+        Object oWStCustomerInfo is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Send DefineParameter xsInteger 1 1 "iCustNumber"
+            Send DefineParameter xsString 1 1 "sName"
+            Send DefineParameter xsString 1 1 "sCustAddress"
+            Send DefineParameter xsString 1 1 "sCity"
+            Send DefineParameter xsString 1 1 "sState"
+            Send DefineParameter xsString 1 1 "sZip"
+            Send DefineParameter xsString 1 1 "sPhoneNumber"
+            Send DefineParameter xsString 1 1 "sFaxNumber"
+            Send DefineParameter xsString 1 1 "sEmailAddress"
+            Send DefineParameter xsReal 1 1 "rCreditLimit"
+            Send DefineParameter xsReal 1 1 "rPurchases"
+            Send DefineParameter xsReal 1 1 "rBalance"
+            Send DefineParameter xsString 1 1 "sComments"
+            Send DefineParameter xsString 1 1 "sStatus"
+        End_Object
+
+        Object oWStOrderDet is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Send DefineParameter xsString 1 1 "sItemID"
+            Send DefineParameter xsInteger 1 1 "iQty"
+            Send DefineParameter xsReal 1 1 "rUnitPrice"
+            Send DefineParameter xsReal 1 1 "rPrice"
+        End_Object
+
+        Object oWSArrayOftOrderDet is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Set peArrayType to C_atArray
+            Set piDimensions to 1
+            Send DefineStructParameter oWStOrderDet 0 C_unbounded "tOrderDet"
+        End_Object
+
+        Object oWStOrder is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Send DefineParameter xsInteger 1 1 "iOrderNumber"
+            Send DefineParameter xsInteger 1 1 "iCustNumber"
+            Send DefineParameter xsDate 1 1 "dOrdDate"
+            Send DefineParameter xsString 1 1 "sTerms"
+            Send DefineParameter xsString 1 1 "sShipVia"
+            Send DefineParameter xsString 1 1 "sOrderedBy"
+            Send DefineParameter xsString 1 1 "sSalesPerson"
+            Send DefineParameter xsReal 1 1 "rOrderTotal"
+            Send DefineStructParameter oWSArrayOftOrderDet 1 1 "ArrayOfDetails"
+        End_Object
+
+        Object oWSArrayOfInt is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Set peArrayType to C_atArray
+            Set piDimensions to 1
+            Send DefineParameter xsInteger 0 C_unbounded "int"
+        End_Object
+
+        Object oWSArrayOftCustomerInfo is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Set peArrayType to C_atArray
+            Set piDimensions to 1
+            Send DefineStructParameter oWStCustomerInfo 0 C_unbounded "tCustomerInfo"
+        End_Object
+
+        Object oWStOrderSummary is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Send DefineParameter xsInteger 1 1 "iOrderNumber"
+            Send DefineParameter xsDate 1 1 "dOrderDate"
+            Send DefineParameter xsReal 1 1 "rOrderTotal"
+        End_Object
+
+        Object oWSArrayOftOrderSummary is a cSoapMetaStruct
+            Set psNameSpace to "http://tempuri.org/"
+            Set peArrayType to C_atArray
+            Set piDimensions to 1
+            Send DefineStructParameter oWStOrderSummary 0 C_unbounded "tOrderSummary"
+        End_Object
+
+    End_Procedure
+
+    // 
+    // Function wsGetOrdersForCustomer
+    // 
+    // Searches for order number in the OrderHeader file for specified customer number
+    // and returns order numbers.
+    // 
+    Function wsGetOrdersForCustomer Integer lliCustNum Returns Integer[]
+        Integer[] llGetOrdersForCustomerResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "GetOrdersForCustomer"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "GetOrdersForCustomerResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsInteger 1 1 "iCustNum" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter lliCustNum to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineStructParameter oWSArrayOfInt 1 1 "GetOrdersForCustomerResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llGetOrdersForCustomerResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llGetOrdersForCustomerResult
+    End_Function
+
+    // 
+    // Function wsChangeCustomerAddress
+    // 
+    // Change address for customer.
+    // 
+    Function wsChangeCustomerAddress Integer lliCustNum tWStCustAddress llNewCustomerAddress Returns Boolean
+        Boolean llChangeCustomerAddressResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "ChangeCustomerAddress"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "ChangeCustomerAddressResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsInteger 1 1 "iCustNum" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter lliCustNum to spParameters[0].ValueTree
+
+        // Parameter 1
+        Get DefineStructParameter oWStCustAddress 1 1 "NewCustomerAddress" "http://tempuri.org/" to spParameters[1].SoapParamDef 
+        ValueTreeSerializeParameter llNewCustomerAddress to spParameters[1].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsBoolean 1 1 "ChangeCustomerAddressResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llChangeCustomerAddressResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llChangeCustomerAddressResult
+    End_Function
+
+    // 
+    // Function wsCreateNewCustomer
+    // 
+    // Add new customer to Customer table.
+    // 
+    Function wsCreateNewCustomer tWStNewCustomer llNewCustomer Returns Integer
+        Integer llCreateNewCustomerResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "CreateNewCustomer"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "CreateNewCustomerResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineStructParameter oWStNewCustomer 1 1 "NewCustomer" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter llNewCustomer to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineParameter xsInteger 1 1 "CreateNewCustomerResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llCreateNewCustomerResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llCreateNewCustomerResult
+    End_Function
+
+    // 
+    // Function wsGetCustomerInfo
+    // 
+    // Searches for customer number in the Customer table and returns customer
+    // details.
+    // 
+    Function wsGetCustomerInfo Integer lliCustNum Returns tWStCustomerInfo
+        tWStCustomerInfo llGetCustomerInfoResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "GetCustomerInfo"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "GetCustomerInfoResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsInteger 1 1 "iCustNum" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter lliCustNum to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineStructParameter oWStCustomerInfo 1 1 "GetCustomerInfoResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llGetCustomerInfoResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llGetCustomerInfoResult
+    End_Function
+
+    // 
+    // Function wsGetCustomerInfoList
+    // 
+    // Reads customer table and returns an array with a list of customers.
+    // 
+    Function wsGetCustomerInfoList Returns tWStCustomerInfo[]
+        tWStCustomerInfo[] llGetCustomerInfoListResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "GetCustomerInfoList"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "GetCustomerInfoListResponse"
+        Set pbResponseBare         to False
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineStructParameter oWSArrayOftCustomerInfo 1 1 "GetCustomerInfoListResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llGetCustomerInfoListResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llGetCustomerInfoListResult
+    End_Function
+
+    // 
+    // Function wsGetOrderSummaryForCustomer
+    // 
+    // Searches for order number in the OrderHeader table for specified customer
+    // number and returns order number, date and total.
+    // 
+    Function wsGetOrderSummaryForCustomer Integer lliCustNum Returns tWStOrderSummary[]
+        tWStOrderSummary[] llGetOrderSummaryForCustomerResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "GetOrderSummaryForCustomer"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "GetOrderSummaryForCustomerResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsInteger 1 1 "iCustNum" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter lliCustNum to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineStructParameter oWSArrayOftOrderSummary 1 1 "GetOrderSummaryForCustomerResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llGetOrderSummaryForCustomerResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llGetOrderSummaryForCustomerResult
+    End_Function
+
+    // 
+    // Function wsGetOrderInfo
+    // 
+    // Searches for order number in the OrderHeader table and returns order header and
+    // details.
+    // 
+    Function wsGetOrderInfo Integer lliOrdNum Returns tWStOrder
+        tWStOrder llGetOrderInfoResult
+        tSoapParameter[] spParameters
+        tSoapParameter[] spReturnParameters
+        Integer eStatus
+
+        Send Reset
+        Set psSOAPAction           to ""
+        Set peSoapStyle            to ssDocument
+
+        Set psRequestNSURI         to "http://tempuri.org/"
+        Set peSoapEncoding         to seLiteral
+        Set psMethodRequest        to "GetOrderInfo"
+        Set pbRequestBare          to False
+        Set pbRequestOnly          to False
+
+        Set psResponseNSURI        to "http://tempuri.org/"
+        Set peResponseSoapEncoding to seLiteral
+        Set psMethodResponse       to "GetOrderInfoResponse"
+        Set pbResponseBare         to False
+
+        // Parameter 0
+        Get DefineParameter xsInteger 1 1 "iOrdNum" "http://tempuri.org/" to spParameters[0].SoapParamDef 
+        ValueTreeSerializeParameter lliOrdNum to spParameters[0].ValueTree
+
+        Set pspParameters to spParameters
+
+        // Return Parameter
+        Get DefineStructParameter oWStOrder 1 1 "GetOrderInfoResult" "http://tempuri.org/" to spReturnParameters[0].SoapParamDef
+        Set pspReturnParameters to spReturnParameters
+
+        Get DoInvokeService to eStatus
+        If (eStatus=wssOK) Begin
+            Get pspReturnParameters   to spReturnParameters
+            ValueTreeDeserializeParameter spReturnParameters[0].ValueTree to llGetOrderInfoResult
+        End
+        Else Begin
+            Send LastError
+        End
+
+        Function_Return llGetOrderInfoResult
+    End_Function
+
+End_Class
+

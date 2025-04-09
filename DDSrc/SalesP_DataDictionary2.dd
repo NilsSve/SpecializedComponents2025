@@ -1,0 +1,26 @@
+﻿Use SalesP.DD
+Use cSalesPersonManagerDataDictionary.dd
+
+// This is a sub-class of SalesP_DataDictionary that can be used with the SalesPersonManager parent Alias DD.
+// We are  creating a sub-class so we can add all of our customizations to the DD and only use this where it is
+// needed, which is SalesP.vw. Other views using the super-class SalesP_DataDictionary will work as they did.
+
+Class SalesP_DataDictionary2 is a SalesP_DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        // we want local DD relates
+        Set pbUseDDRelates to True
+        
+        // we want to related ManagerSalesPersonId to SalesPersonManager.ID
+        Set Field_Related_FileField Field SalesP.ManagerSalesPersonId to File_Field SalesPersonManager.ID
+        
+        // The Manager parent DD may be a null record
+        Set ParentNullAllowed SalesPersonManager.File_Number to True
+        
+        // The manager parent DD is required to be a valid save structure
+        Set Add_Server_File to SalesPersonManager.File_Number
+    End_Procedure
+    
+End_Class

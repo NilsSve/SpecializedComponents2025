@@ -1,0 +1,5 @@
+This view lets you experiment with the new collating system. 
+
+You may type characters and determine the sort order that they will be in, considering the locale selected and the other attributes specified through the radio groups. 
+
+You may also create a TXT file containing characters from a language (one character/word per line; each line CRLF terminated) and import it into the Unsorted List. Note that space will always be added as one line to the imported list. The demo includes a file (Collate_EN_Characters.txt) containing characters from the American-EN keyboard for you to experiment with. 

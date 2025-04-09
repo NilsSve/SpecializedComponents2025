@@ -1,0 +1,125 @@
+﻿Use Windows.pkg
+Use cCJGridPromptList.pkg
+Use cCJGridColumn.pkg
+Use cRegistry.pkg
+
+Object oSelectWebApp is a ModalPanel
+    Set Size to 189 211
+    Set Label to "SelectWebApp"
+    Set piMinSize to 89 211
+    Set Location to 2 2
+    Set Border_Style to Border_Thick
+    Property String psSelectedWebApp ""
+
+    Object oOK_Btn is a Button
+        Set Label    to "&OK"
+        Set Location to 171 105
+        Set peAnchors To anBottomRight
+
+        Procedure OnClick
+            String[] aValues
+            Integer iColWebApp
+            Send Ok of oWebAppGrid 
+        End_Procedure
+
+    End_Object
+
+    Object oCancel_Btn is a Button
+        Set Label    to "&Cancel"
+        Set Location to 171 160
+        Set peAnchors to anBottomRight
+
+        Procedure OnClick
+            Send Close_Panel
+        End_Procedure
+
+    End_Object
+
+    Object oWebAppGrid is a cCJGridPromptList
+        Set Size to 160 198
+        Set Location to 5 6
+        Set peAnchors to anAll
+        Set peUpdateMode to umPromptNonInvoking
+
+        Object oColWebApp is a cCJGridColumn
+            Set piWidth to 100
+            Set psCaption to "WebApp"
+        End_Object
+        
+        Procedure DisplayWebApps String[] sWebApps
+            Handle hoDataSource
+            tDataSourceRow[] TheData
+            Boolean bFound
+            Integer iRow iColWebApp
+            
+            Get phoDataSource to hoDataSource
+            
+            // Get the datasource indexes of the various columns
+            Get piColumnId of oColWebApp to iColWebApp
+           
+            
+            // Load all data into the datasource array
+            For iRow from 0 to (SizeOfArray(sWebApps) - 1)
+                Move sWebApps[iRow] to TheData[iRow].sValue[iColWebApp]
+            Loop
+            
+            // Initialize Grid with new data
+            Send InitializeData TheData
+            Send MovetoFirstRow
+            
+        End_Procedure
+        
+        Procedure Activating
+            Forward Send Activating
+            
+            Send LoadWebApps
+        End_Procedure
+    End_Object
+    
+    Procedure LoadWebApps
+        Handle hoRegistry
+        Boolean bOk
+        String[] sWebApps
+        
+        Get Create (RefClass(cRegistry)) to hoRegistry
+        
+        Set phRootKey of hoRegistry to HKEY_LOCAL_MACHINE
+        Set pfAccessRights of hoRegistry to (Key_Read ior KEY_WOW64_64KEY)
+        
+        Get OpenKey of hoRegistry (C_DFVersionRegistryRoot + "\WebApp Server\Web Applications") to bOk
+        If (bOk) Begin
+            Get Subkeys of hoRegistry to sWebApps
+            
+            Send DisplayWebApps of oWebAppGrid sWebApps
+            Send CloseKey of hoRegistry
+        End
+        Else Begin
+            Error DFERR_PROGRAM "Could not read WebApps from registry!"
+        End
+        
+        Send Destroy of hoRegistry
+        
+    End_Procedure
+
+    On_Key Key_Alt+Key_O Send KeyAction of oOK_Btn
+    On_Key Key_Alt+Key_C Send KeyAction of oCancel_Btn
+    
+    
+     
+    Function SelectWebAppDialog Returns String
+        String sWebApp
+        String[] aValues
+        Integer iColWebApp
+        
+        Send Popup_Modal
+        
+        Get piColumnId of oColWebApp to iColWebApp
+        Get SelectedColumnValues of oWebAppGrid iColWebApp to aValues
+        If (SizeOfArray(aValues) > 0) Begin
+            Move aValues[0] to sWebApp
+        End
+        
+        Function_Return sWebApp
+    End_Function
+
+End_Object

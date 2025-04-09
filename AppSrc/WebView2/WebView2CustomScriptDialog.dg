@@ -1,0 +1,91 @@
+Use Windows.pkg
+
+Object oWebView2CustomScriptDialog is a ModalPanel
+    Set Size to 89 211
+    Set Label to "WebView2CustomScriptDialog"
+    Set piMinSize to 89 211
+    Set Location to 2 2
+    Set Border_Style to Border_Thick
+    Property Boolean pbOk  False
+
+    Object oTextBox1 is a TextBox
+        Set Auto_Size_State to False
+        Set Size to 33 199
+        Set Location to 4 5
+        Set Label to 'oTextBox1'
+        Set Justification_Mode to JMode_Left
+        Set peAnchors to anTopLeftRight
+    End_Object
+
+    Object oForm1 is a Form
+        Set Size to 13 201
+        Set Location to 43 5
+        Set peAnchors to anTopLeftRight
+        
+        // OnChange is called on every changed character
+    //    Procedure OnChange
+    //        String sValue
+    //    
+    //        Get Value to sValue
+    //    End_Procedure
+    
+    End_Object
+    
+    Object oOK_Btn is a Button
+        Set Label    to "&OK"
+        Set Location to 71 102
+        Set peAnchors to anBottomRight
+
+        Procedure OnClick
+            Set pbOk of oWebView2CustomScriptDialog to True
+            Send Close_Panel
+        End_Procedure
+
+    End_Object
+
+    Object oCancel_Btn is a Button
+        Set Label    to "&Cancel"
+        Set Location to 71 157
+        Set peAnchors to anBottomRight
+
+        Procedure OnClick
+            Send Close_Panel
+        End_Procedure
+
+    End_Object
+
+    On_Key Key_Alt+Key_O Send KeyAction of oOK_Btn
+    On_Key Key_Alt+Key_C Send KeyAction of oCancel_Btn
+    
+    Procedure ScriptAlert String sMessage
+        Set Visible_State of oCancel_Btn to False
+        Set Visible_State of oForm1 to False
+        Set Value of oTextBox1 to sMessage
+        Send Popup_Modal
+    End_Procedure
+    
+    Function ScriptConfirm String sMessage Returns Boolean
+        Set Value of oTextBox1 to sMessage
+        Set Visible_State of oCancel_Btn to True
+        Set Visible_State of oForm1 to False
+        Set pbOk to False
+        Send Popup_Modal
+        Function_Return (pbOk(Self))
+    End_Function
+    
+    Function ScriptPrompt String sMessage String sDefault Returns String
+        Set Value of oTextBox1 to sMessage
+        Set Visible_State of oCancel_Btn to True
+        Set Visible_State of oForm1 to True
+        Set Value of oForm1 to sDefault
+        Send Popup_Modal
+        
+        If (pbOk(Self)) Begin
+            Function_Return (Value(oForm1))
+        End
+        Function_Return sDefault
+    End_Function
+
+
+    
+End_Object

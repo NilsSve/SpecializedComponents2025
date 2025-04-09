@@ -1,0 +1,75 @@
+﻿Use SalesP.DD
+
+Open SalesPersonManager
+Set_Attribute DF_FILE_ALIAS of SalesPersonManager.File_Number to DF_FILE_IS_ALIAS
+
+// This is the SalesPersonManager Alias DD as created by the Studio.
+// The only change we've made is to set a new label and status help for the ID and Name
+
+Register_Object SalesPersonManager_sl
+
+Class cSalesPersonManagerDataDictionary is a SalesP_DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set Alias_File to SalesPersonManager.File_Number
+        
+        Set Field_Label_Long Field SalesPersonManager.ID to "Manager ID"
+        Set Status_Help Field SalesPersonManager.ID to "Manager ID code - Upper case alpha"
+        Set Field_Prompt_Object Field SalesPersonManager.ID to SalesPersonManager_sl
+        
+        Set Field_Label_Long Field SalesPersonManager.Name to "Manager Name"
+        Set Field_Label_Short Field SalesPersonManager.Name to "Manager Name"
+        Set Status_Help Field SalesPersonManager.Name to "Manager name - first and last"
+        Set Field_Prompt_Object Field SalesPersonManager.Name to SalesPersonManager_sl
+        
+        Set pbForeignReadOnly to True
+        Set pbUseDDRelates to True
+        Set pbNoCascadeDeleteStrict to True
+    End_Procedure
+    
+    Procedure Update
+    End_Procedure
+    
+    Procedure Backout
+    End_Procedure
+    
+    Procedure Deleting
+    End_Procedure
+    
+    Procedure Creating
+    End_Procedure
+    
+    Function Validate_Save Returns Integer
+        //        If (SalesP.ID = SalesPersonManager.ID) Begin
+        //            Send UserError "Sales Person cannot be assigned to be his own Manager" "Sales Person Manager Error"
+        //            Function_Return -1
+        //        End
+        //
+        //        Function_Return 0
+    End_Function
+    
+    Function Validate_Delete Returns Integer
+    End_Function
+    
+    Function Validate_Cascade_Delete Returns Boolean
+    End_Function
+    
+    Procedure OnSaveRecord
+    End_Procedure
+    
+    Procedure OnPreFind Integer eMessage
+    End_Procedure
+    
+    Procedure OnPostFind Integer eMessage Boolean bFound
+    End_Procedure
+    
+    Procedure OnConstrain
+    End_Procedure
+    
+End_Class
+
+#IFDEF Is$WebApp
+#ELSE
+Use Alias\SalesPersonManager.sl
+#ENDIF

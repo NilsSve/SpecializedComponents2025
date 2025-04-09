@@ -1,0 +1,463 @@
+﻿CompilerWarnings Off
+
+Use DfAllEnt.pkg
+Use cCJStandardCommandBarSystem.pkg
+Use cCJCommandBarSystem.pkg
+Use cToolTipController.pkg
+
+Object oHtmlHelp is a cHtmlHelp
+End_Object
+
+Use DataDefinition\f_DefaultWorkspacePath.pkg
+Use DataDefinition\f_StripFileExt.pkg
+Use DataDefinition\f_StripFilePath.pkg
+Use DataDefinition\f_NormalizeFileName.pkg
+Use DataDefinition\f_IsFileNameValid.pkg
+Use DataDefinition\f_FindFile_Global.pkg
+
+// Set up the runtime frequency
+Set_Attribute DF_RUNTIME_PROGRESS_FREQUENCY to 1
+
+// Ignore can't open file error
+Send Ignore_Error of Error_Object_Id 75
+
+Object oOpenDialog is a OpenDialog
+    Set Dialog_Caption to "Open Workspace"
+    Set Filter_String to "Studio workspace files (*.sws)|*.sws"
+End_Object
+
+
+Object oApplication is a cApplication
+    Set psCompany to "Data Access Worldwide"
+    Set psProduct to "DataFlex Examples"
+    Set psVersion to "25.0"
+    Set psProgram to "DataDefinition"
+    Set psHelpFile to "DevelopmentGuide.chm"
+    Set peHelpType to htHtmlHelp
+    
+    Object oConnection is a cConnection
+Use LoginEncryption.pkg
+Use DatabaseLoginDialog.dg
+    End_Object
+    
+End_Object
+
+Object oToolTipController is a cToolTipController
+    Move Self to ghoToolTipController
+End_Object
+
+Use oEditContextMenu.pkg
+Use oDEOEditContextMenu.pkg
+
+Object oMain is a Panel
+    Set Label to "Data Definition Sample Application"
+    Set Location to 4 3
+    Set Size to 300 450
+    
+    // tracks the current workspace for display to user in views
+    Property String psCurrentWorkspace "Data Definition"
+    
+    Object oCommandBarSystem is a cCJCommandBarSystem
+        Set pbTimerUpdate to True
+        Set pbAutoResizeIcons to True
+        Set peVisualTheme to xtpThemeOffice2013Outlook
+        
+        Procedure OnCreateCommandBars
+            Handle hoOptions
+            Get OptionsObject to hoOptions
+            Forward Send OnCreateCommandBars
+        End_Procedure
+        
+        Object oMenuBar is a cCJMenuBar
+            
+            Object oFileMenu is a cCJMenuItem
+                Set peControlType to xtpControlPopup
+                Set psCaption   to "&File"
+                Set psDescription to "Find, Save, Delete, Clear information or quit this application."
+                Set psCategory to "Menus"
+                
+                Object oClearMenuItem is a cCJClearMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oClearAllMenu is a cCJClearAllMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oPromptMenuItem is a cCJPromptMenuItem
+                    Set pbAddToDesignerMenu to True
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+                Object oFindMenuItem is a cCJFindMenuItem
+                    Set pbAddToDesignerMenu to True
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+                Object oFindNextMenu is a cCJFindNextMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oFindPreviousMenu is a cCJFindPreviousMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oFindFirstMenu is a cCJFindFirstMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oFindLastMenu is a cCJFindLastMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oSaveMenuItem is a cCJSaveMenuItem
+                    Set pbAddToDesignerMenu to True
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+                Object oDeleteMenuItem is a cCJDeleteMenuItem
+                    Set pbAddToDesignerMenu to True
+                End_Object
+                
+                Object oExitMenu is a cCJExitMenuItem
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+            End_Object
+            
+            Object oReportMenu is a cCJMenuItem
+                Set peControlType to xtpControlPopup
+                Set psCaption to "&Report"
+                Set psToolTip to "Report"
+                Set psDescription to "Available Reports"
+                
+                Object oResizesample3ProgresssentinelMenuItem is a cCJMenuItem
+                    Set psCaption to "Resize Sample 3 / Progress Sentinel"
+                    Set psTooltip to "Resize Sample 3 / Progress Sentinel"
+                    Set psShortcut to "Ctrl+3"
+                    
+                    Procedure OnExecute Variant vCommandBarControl
+                        Handle hoClient
+                        Get Client_Id to hoClient
+                        Send Activate_Resize03 of hoClient
+                    End_Procedure
+                End_Object
+                
+                Object oReindexTablesSampleMenuItem is a cCJMenuItem
+                    Set psCaption to "Reindex Tables Sample"
+                    Set psTooltip to "Reindex Tables Sample"
+                    Set psShortcut to "Ctrl+4"
+                    
+                    Procedure OnExecute Variant vCommandBarControl
+                        Handle hoClient
+                        Get Client_Id to hoClient
+                        Send Activate_Reindex of hoClient
+                    End_Procedure
+                End_Object
+            End_Object
+            
+            Object oNavigateMenu is a cCJMenuItem
+                Set peControlType to xtpControlPopup
+                Set psCaption to "&Navigate"
+                Set psTooltip to "Navigate"
+                Set psDescription to "Move to different areas of the application"
+                
+                Object oNextAreaMenu is a cCJNextAreaMenu
+                End_Object
+                
+                Object oPriorAreaMenu is a cCJPriorAreaMenu
+                End_Object
+                
+                Object oNextViewMenu is a cCJNextViewMenu
+                End_Object
+                
+                Object oPriorViewMenu is a cCJPriorViewMenu
+                End_Object
+                
+                Object oPromptMenu is a cCJPromptMenuItem
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+                Object oZoomMenu is a cCJZoomMenuItem
+                End_Object
+                
+            End_Object
+            
+            Object oWindowMenu is a cCJMDIWindowsMenuItem
+                Set peControlType to xtpControlPopup
+                Set psCaption to "&Window"
+                Set psToolTip to "Window"
+                Set psDescription to "Display Current Views and set other display options."
+                
+                // These are the static windows items. More will be created in onInitPopup
+                Object oDisplayOptionsMenu is a cCJMenuItem
+                    Set peControlType to xtpControlPopup
+                    Set psCaption to "&Display Options"
+                    Set psToolTip to "Display Options"
+                    Set psDescription to "Set display options"
+                    
+                    Object oStatusbarMenu is a cCJStatusbarMenuItem
+                    End_Object
+                    
+                    Object oAutoArrangeIconsMenu is a cCJAutoArrangeIconsMenuItem
+                    End_Object
+                    
+                    Object oRestoreMenusMenu is a cCJRestoreMenusMenuItem
+                        Set pbControlBeginGroup to True
+                    End_Object
+                    
+                End_Object
+                
+                Object oCascadeMenu is a cCJCascadeMenuItem
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+                Object oHorizTile is a cCJTileHorizontally
+                End_Object
+                
+                Object oVertTile is a cCJTileVertically
+                End_Object
+                
+                Object oMinimizeMenuItem is a cCJMinimizeWindowsMenuItem
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+                Object oRestoreMenuItem is a cCJRestoreWindowsMenuItem
+                End_Object
+                
+                Object oArrangeIconsMenuItem is a cCJAutoArrangeIconsMenuItem
+                    Set pbControlBeginGroup to True
+                End_Object
+                
+            End_Object
+            
+            Object oHelpMenu is a cCJMenuItem
+                Set peControlType to xtpControlPopup
+                Set psCaption to "&Help"
+                Set psDescription to "Access Information for learning and using this DataFlex application."
+                Set psToolTip to "Help"
+                
+                Object oHelpMenuItem is a cCJHelpMenuItem
+                End_Object
+                
+                Object oAboutMenuItem is a cCJAboutMenuItem
+                End_Object
+                
+            End_Object
+            
+        End_Object
+        
+        Object oFindToolBar is a cCJToolbar
+            Set psTitle to "Finding Toolbar"
+            
+            Object oFindFirstTool is a cCJFindFirstMenuItem
+            End_Object
+            
+            Object oFindPreviousTool is a cCJFindPreviousMenuItem
+            End_Object
+            
+            Object oFindMenuTool is a cCJFindMenuItem
+            End_Object
+            
+            Object oFindNextTool is a cCJFindNextMenuItem
+            End_Object
+            
+            Object oFindLastTool is a cCJFindLastMenuItem
+            End_Object
+            
+            Object oPromptToolItem is a cCJPromptMenuItem
+                Set pbControlBeginGroup to True
+            End_Object
+            
+        End_Object
+        
+        Object oFileToolBar is a cCJToolbar
+            Set psTitle to "Data Entry Toolbar"
+            
+            Object oClearToolItem is a cCJClearMenuItem
+                Set peControlStyle to xtpButtonIconAndCaption
+            End_Object
+            
+            Object oClearAllToolItem2 is a cCJClearAllMenuItem
+                Set peControlStyle to xtpButtonIconAndCaption
+            End_Object
+            
+            Object oSaveToolItem is a cCJSaveMenuItem
+                Set peControlStyle to xtpButtonIconAndCaption
+                Set pbControlBeginGroup to True
+            End_Object
+            
+            Object oDeleteToolItem is a cCJDeleteMenuItem
+                Set peControlStyle to xtpButtonIconAndCaption
+            End_Object
+            
+        End_Object
+        
+        Object oEditToolBar is a cCJToolbar
+            Set psTitle to "Edit Toolbar"
+            
+            Object oCutToolbarItem is a cCJCutMenuItem
+            End_Object
+            
+            Object oCopyToolbarItem is a cCJCopyMenuItem
+            End_Object
+            
+            Object oPasteToolbarItem is a cCJPasteMenuItem
+            End_Object
+            
+            Object oDeleteEditToolbarItem is a cCJDeleteEditMenuItem
+                Set pbControlBeginGroup to True
+            End_Object
+            
+        End_Object
+        
+        Object oStatusBar is a cCJStatusBar
+            
+            Object oStatusPane1 is a cCJStatusBarPane
+                Set piID to sbpIDIdlePane
+                Set pbStyleStretch to True
+            End_Object
+            
+            Object oStatusPane2 is a cCJStatusBarPane
+                Set phoViewPane to Self
+                Set pbStyleStretch to True
+            End_Object
+            
+        End_Object
+        
+    End_Object
+    
+    Object oClientArea is a ClientArea
+Use DataDefinition\Resize03.rv
+Use DataDefinition\Reindex.rv
+        
+        On_Key Key_Ctrl+Key_3 Send Activate_Resize03
+        On_Key Key_Ctrl+Key_4 Send Activate_Reindex
+        
+Use StdAbout.pkg
+        
+        Procedure Activate_About
+            Send DoAbout "" "" "" "" ""
+        End_Procedure
+        
+    End_Object
+    
+    // Returns the workspace name as per the workspace (.sws) filename without path or file extension.
+    Function psWorkspaceName String sWorkspaceFile Returns String
+        Move (StripFileExt(sWorkspaceFile)) to sWorkspaceFile
+        Move (StripFilePath(sWorkspaceFile)) to sWorkspaceFile
+        Function_Return sWorkspaceFile
+    End_Function
+    
+    // Select and open a workspace to work with the tables in that workspace
+    // This allows the user to select a .sws file to open a workspace
+    Procedure SelectWorkspace
+        String sDefaultWorkspaceLocation sWorkspaceName sWorkspaceFile sWorkspacePaths
+        String sError sMessageHeader sPath sMessage
+        Boolean bFileSelected bGoodWorkspace
+        Integer iWorkspaceOpened eOpened
+        Handle hoWorkspace hoIniFile
+        
+        // get the default location of the VDF sample workspaces
+        Get DefaultOpenWorkspacePath to sDefaultWorkspaceLocation
+        
+        Set Initial_Folder of oOpenDialog to sDefaultWorkspaceLocation
+        Get Show_Dialog of oOpenDialog to bFileSelected
+        
+        If (bFileSelected = True) Begin
+            Get File_Name of oOpenDialog to sWorkspaceFile
+            Move True to bGoodWorkspace
+        End
+        Else Begin
+            Move False to bGoodWorkspace
+        End
+        
+        // Ensure that sWorkspaceFile is a long filename format.
+        Move (NormalizeFileName(sWorkspaceFile)) to sWorkspaceFile
+        
+        // Try to open the new workspace....
+        Move (phoWorkspace(oApplication)) to hoWorkspace
+        Move (sWorkspaceFile + "\n\n") to sMessageHeader
+        
+        If (bGoodWorkspace) Begin
+            If Not (IsFilenameValid(sWorkspaceFile)) Begin
+                Move "Unable to locate the Workspace .sws file." to sError
+                Move False to bGoodWorkspace
+            End
+        End
+        
+        // Find the workspace paths file (.ws) from the .sws file....
+        If bGoodWorkspace Begin
+            Get Create (RefClass(cIniFile)) to hoIniFile
+            Set psFileName of hoIniFile to sWorkspaceFile
+            Get ReadString of hoIniFile 'WorkspacePaths' 'ConfigFile' "" to sWorkspacePaths
+            Send Destroy to hoIniFile
+            
+            If (sWorkspacePaths = "") Begin
+                Move ('The workspace .sws file is not configured properly.\nThe "ConfigFile" setting which defines the .ws file is not defined in this ini file') to sError
+                Move False to bGoodWorkspace
+            End
+        End
+        
+        // If the .sws file has a relative path then turn it into a full path....
+        If (bGoodWorkspace) Begin
+            Move (ExtractFilePath(sWorkspaceFile)) to sPath
+            
+            If (Left(sWorkspacePaths, 2) = ".\") Begin
+                Move (Replace(".\", sWorkspacePaths, sPath)) to sWorkspacePaths
+            End
+            
+            // Open the workspace using the .ws file....
+            Send DoClearPaths of hoWorkspace
+            Get OpenWorkspaceFile of hoWorkspace sWorkspacePaths to eOpened
+            
+            // was the workspace opened successfully?
+            Move (eOpened = wsWorkspaceOpened) to bGoodWorkspace
+            If (bGoodWorkspace) Begin
+                Get psWorkspaceName sWorkspaceFile to sWorkspaceName
+                Set psCurrentWorkspace to sWorkspaceName
+            End
+            Else Begin
+                // if we could not open the workspace we will customize the message is the config.ws file is not
+                // found. When used with normal projects, the class error is fine. However at development time we need
+                // to make it clear that the .ws is not found.
+                If (eOpened = wsWorkspaceFileNotFound) Begin
+                    Move ("Unable to locate the Workspace's .ws file.\n\n"+ sWorkspacePaths * "not found") to sError
+                End
+                Else Begin
+                    Get OpenWorkspaceErrorMessage of hoWorkspace eOpened to sError
+                End
+            End
+        End
+        // Report load workspace errors....
+        Else Begin
+            Move (sMessageHeader + sError + "\n\nPlease load a different Workspace") to sMessage
+            Send UserError ("Load Workspace Error\n\n" + sMessage)
+        End
+    End_Procedure
+    
+    // Callback facility enabler. Pass the information to the status panel.
+    Function Callback String CallbackMsg Integer CallbackType Returns Integer
+        Number nReady nTotal nPercent
+        Integer iStatPan
+        
+        Move (Status_Panel(Self)) to iStatPan
+        If iStatPan Begin
+            If (CallbackType <> DF_MESSAGE_PROGRESS_VALUE) ;
+                Send Update_StatusPanel of iStatPan CallbackMsg
+            Else Begin
+                // Interpret numbers
+                Move (Left(CallbackMsg, (Pos(",", CallbackMsg) - 1))) to nReady
+                Move (Right(CallBackMsg, (Length(CallbackMsg) - Pos(",", CallbackMsg)))) to nTotal
+                Move ((nReady/nTotal) * 100) to nPercent
+                
+                Send Update_StatusPanel of iStatPan ("__PROGRESS__" + String(Integer(nPercent)))
+            End
+        End
+        
+        Function_Return False
+    End_Function
+    
+End_Object
+
+Start_UI

@@ -1,0 +1,213 @@
+﻿Use DFAllEnt.pkg
+Use cCJStandardCommandBarSystem.pkg
+Use cCJCommandBarSystem.pkg
+Use Windows.pkg
+Use cCJGrid.pkg
+Use cWebAppLogReader.pkg
+Use cCJGridColumn.pkg
+Use File_dlg.pkg
+Use WebAppLog\SelectWebApp.dg
+
+Object oHtmlHelp is a cHtmlHelp
+End_Object
+
+Object oApplication is a cApplication
+    Set peHelpType to htHtmlHelp
+
+    Object oConnection is a cConnection
+        Use LoginEncryption.pkg
+        Use DatabaseLoginDialog.dg
+    End_Object
+
+End_Object
+
+Object oToolTipController is a cToolTipController
+    Move Self to ghoToolTipController
+End_Object
+
+Define C_AppTitle for "WebApp Log Reader"
+
+Object oMain is a BasicPanel
+    Set Size to 283 568
+    Set Label to C_AppTitle
+    
+    Object oCJCommandBarSystem1 is a cCJCommandBarSystem
+        Procedure OnCreateCommandBars
+            Forward Send OnCreateCommandBars
+            Set phoCommandBars of oMain to Self 
+            Move Self to ghoCommandBars
+        End_Procedure
+        
+        Object oCJMenuBar1 is a cCJMenuBar
+            Object oFileMenuItem is a cCJMenuItem
+                Set psCaption to "File"
+                Set psTooltip to "File"
+                Set peControlType to xtpControlPopup
+
+                Object oOpenfromdiskMenuItem is a cCJMenuItem
+                    Set psCaption to "Open from disk"
+                    Set psTooltip to "Open from disk"
+
+                    Procedure OnExecute Variant vCommandBarControl
+                        Forward Send OnExecute vCommandBarControl
+                        Send OpenLogFromDisk of oMain
+                    End_Procedure
+                End_Object
+
+                Object oOpenfromrunningwebappMenuItem is a cCJMenuItem
+                    Set psCaption to "Open from running webapp"
+                    Set psTooltip to "Open from running webapp"
+
+                    Procedure OnExecute Variant vCommandBarControl
+                        Forward Send OnExecute vCommandBarControl
+                        
+                        Send OpenLogFromWebApp of oMain
+                    End_Procedure
+                End_Object
+            End_Object
+        End_Object
+    End_Object
+
+    Object oLogGrid is a cCJGrid
+        Set Size to 263 568
+        Set Location to 20 0
+        Set peAnchors to anAll
+
+        Object oColType is a cCJGridColumn
+            Set piWidth to 40
+            Set psCaption to "Type"
+        End_Object
+
+        Object oColDate is a cCJGridColumn
+            Set piWidth to 100
+            Set psCaption to "Date"
+        End_Object
+
+        Object oColSessionId is a cCJGridColumn
+            Set piWidth to 100
+            Set psCaption to "Session ID"
+        End_Object
+
+        Object oColFrom is a cCJGridColumn
+            Set piWidth to 100
+            Set psCaption to "From"
+        End_Object
+
+        Object oColMessage is a cCJGridColumn
+            Set piWidth to 200
+            Set psCaption to "Message"
+        End_Object
+
+
+        
+        Procedure DisplayData tWebAppLogEntry[] TheLog 
+            Handle hoDataSource
+            tDataSourceRow[] TheData
+            Boolean bFound
+            Integer iRow iColType iColDate iColMessage iColSessionID iColFrom
+            
+            Get phoDataSource to hoDataSource
+            
+            // Get the datasource indexes of the various columns
+            Get piColumnId of oColType to iColType
+            Get piColumnId of oColDate to iColDate
+            Get piColumnId of oColSessionId to iColSessionID
+            Get piColumnId of oColFrom to iColFrom
+            Get piColumnId of oColMessage to iColMessage
+            
+            // Load all data into the datasource array
+            For iRow from 0 to (SizeOfArray(TheLog) - 1)
+                Move TheLog[iRow].iType to TheData[iRow].sValue[iColType]
+                Move TheLog[iRow].dDate to TheData[iRow].sValue[iColDate]
+                Move TheLog[iRow].sSessionId to TheData[iRow].sValue[iColSessionID]
+                Move TheLog[iRow].sFrom to TheData[iRow].sValue[iColFrom]
+                Move TheLog[iRow].sMessage to TheData[iRow].sValue[iColMessage]
+            
+            Loop
+            
+            // Initialize Grid with new data
+            Send InitializeData TheData
+            Send MovetoFirstRow
+        End_Procedure
+        
+        Procedure ClearData
+            tDataSourceRow[] TheData
+            Send InitializeData TheData
+        End_Procedure
+     
+    End_Object
+    
+    Object oLogReader is a cWebAppLogReader
+    End_Object
+    
+    Object oOpenLogDialog is a OpenDialog
+    
+        // Call up the Open Dialog via:
+    //    Get Show_Dialog {of object} to BooleanVariable
+        Set Filter_String to 'WebApp Log|*.log'
+
+    End_Object
+    
+
+    Procedure DisplayLogFromWebApp String sWebApp
+        Boolean bOk
+        tWebAppLogEntry[] TheLog
+        
+        Get OpenWebAppLogFromRegisteredApp of oLogReader sWebApp to bOk
+        If (bOk) Begin
+            Get ReadEntireLog of oLogReader to TheLog
+            Send CloseWebAppLog of oLogReader    
+           
+            Send DisplayData of oLogGrid TheLog
+            Set Label of oMain to (C_AppTitle + " (WebApp: " + sWebApp + ")")
+        End
+        Else Begin
+            Send ClearData of oLogGrid
+            Set Label of oMain to C_AppTitle
+        End
+    End_Procedure
+    
+    Procedure OpenLogFromWebApp
+        String sWebApp
+        
+        Get SelectWebAppDialog of oSelectWebApp to sWebApp
+        
+        If (sWebApp <> "") Begin
+           Send DisplayLogFromWebApp sWebApp 
+        End        
+    End_Procedure
+    
+    
+    
+    Procedure DisplayLogFromDisk String sPath
+        Boolean bOk
+        tWebAppLogEntry[] TheLog
+        
+        Get OpenWebAppLogFromFile of oLogReader sPath to bOk
+        If (bOk) Begin
+            Get ReadEntireLog of oLogReader to TheLog
+            Send CloseWebAppLog of oLogReader    
+           
+            Send DisplayData of oLogGrid TheLog
+            Set Label of oMain to (C_AppTitle + " (WebApp: " + sPath + ")")
+        End
+        Else Begin
+            Send ClearData of oLogGrid
+            Set Label of oMain to C_AppTitle
+        End
+    End_Procedure
+    
+    Procedure OpenLogFromDisk
+        Boolean bOpen
+        String sPath
+        
+        Get Show_Dialog of oOpenLogDialog to bOpen
+        If (bOpen) Begin
+            Get File_Name of oOpenLogDialog to sPath
+            Send DisplayLogFromDisk sPath
+        End
+    End_Procedure
+End_Object
+ 
+Send Activate of oMain
+Start_UI

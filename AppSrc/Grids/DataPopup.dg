@@ -1,0 +1,113 @@
+﻿Use Windows.pkg
+
+Struct tTableDataLine
+    String sName
+    String sType
+    Integer iSize
+    String sMain
+    Boolean bNull
+    String sDescription
+End_Struct
+
+
+Object oDataPopup is a ModalPanel
+    Set Size to 133 299
+    Set Label to "Edit One Table Line"
+    Set piMinSize to 89 211
+    Set Location to 2 2
+    Set Border_Style to Border_Thick
+    
+    Property Boolean pbOk
+    
+    Object oName is a Form
+        Set Size to 13 100
+        Set Location to 11 99
+        Set Label to "Name"
+        
+    End_Object
+    
+    Object oType is a Form
+        Set Size to 13 100
+        Set Location to 28 99
+        Set Label to "Type"
+        
+    End_Object
+    
+    Object oSize is a Form
+        Set Size to 13 100
+        Set Location to 45 99
+        Set Label to "Size"
+        
+    End_Object
+    
+    Object oMain is a Form
+        Set Size to 13 100
+        Set Location to 62 99
+        Set Label to "Main Index"
+        
+    End_Object
+    
+    Object oNull is a CheckBox
+        Set Size to 10 50
+        Set Location to 79 99
+        Set Label to "Nulls Allowed"
+    End_Object
+    
+    Object oDesc is a Form
+        Set Size to 13 186
+        Set Location to 93 99
+        Set Label to "Description"
+        
+    End_Object
+    
+    Object oOK_Btn is a Button
+        Set Label    to "&OK"
+        Set Location to 115 190
+        Set peAnchors to anBottomRight
+        
+        Procedure OnClick
+            Set pbOk to True
+            Send Close_Panel
+        End_Procedure
+        
+    End_Object
+    
+    Object oCancel_Btn is a Button
+        Set Label    to "&Cancel"
+        Set Location to 115 245
+        Set peAnchors to anBottomRight
+        
+        Procedure OnClick
+            Send Close_Panel
+        End_Procedure
+        
+    End_Object
+    
+    On_Key Key_Alt+Key_O Send KeyAction of oOK_Btn
+    On_Key Key_Alt+Key_C Send KeyAction of oCancel_Btn
+    
+    Function GetTableData tTableDataLine ByRef LineOfDat Returns Boolean
+        Boolean bOk bChecked
+        Set pbOk to False
+        Set Value of oName to LineOfDat.sName
+        Set Value of oType to LineOfDat.sType
+        Set Value of oSize to LineOfDat.iSize
+        Set Value of oMain to LineOfDat.sMain
+        Set Checked_State of oNull to LineOfDat.bNull
+        Set Value of oDesc to LineOfDat.sDescription
+        Send Popup
+        Get pbOk to bOk
+        If bOk Begin
+            Get Value of oName to LineOfDat.sName
+            Get Value of oType to LineOfDat.sType
+            Get Value of oSize to LineOfDat.iSize
+            Get Value of oMain to LineOfDat.sMain
+            Get Checked_State of oNull to bChecked
+            Move (If(bChecked,1,0)) to LineOfDat.bNull
+            Get Value of oDesc to LineOfDat.sDescription
+        End
+        Function_Return bOk
+    End_Function
+    
+End_Object
+

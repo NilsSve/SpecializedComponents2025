@@ -1,0 +1,188 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./Sample-1-help_files/filelist.xml">
+<title>This is the file that will tell you how do make everything work</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>John Tuohy</o:Author>
+  <o:LastAuthor>John Tuohy</o:LastAuthor>
+  <o:Revision>6</o:Revision>
+  <o:TotalTime>198</o:TotalTime>
+  <o:Created>2000-06-28T16:38:00Z</o:Created>
+  <o:LastSaved>2000-07-19T15:57:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>326</o:Words>
+  <o:Characters>1863</o:Characters>
+  <o:Company>Data Access Corp</o:Company>
+  <o:Lines>15</o:Lines>
+  <o:Paragraphs>3</o:Paragraphs>
+  <o:CharactersWithSpaces>2287</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:224027450;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-926543218 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l1
+	{mso-list-id:1299258929;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1313940450 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p class=MsoNormal><a name="_top"></a>Tell me about the other samples: <a
+href="Sample-2-help.html">[XML-Sample-2]</a> <a href="Sample-3-help.html">[XML-Sample-3]</a>
+<a href="Sample-4-help.html">[XML-Sample-4]</a> <a href="Sample-5-help.html">[XML-Sample-5]</a></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<h1>XML Sample-1 </h1>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This samples shows the basics of XML parsing. The sample
+does the following:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>Creates
+     an XML Object</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>Assigns a 
+     default namespace to it</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>Assigns
+     the document to an existing XML document and loads it</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>Reads
+     through the current document looking for Customers and</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>For
+     each customer find the customer name, phone and state</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>For
+     each customer state, convert it from a state name to a state ID and place
+     it back in the XML document</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list .5in'>Save
+     the altered XML document under a new name.</li>
+</ol>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This sample is full of comments…read them.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>As with all the samples we are using an embedded IE5 control
+to display the XML files. Don’t get confused and think this is what you are
+supposed to do with XML files. The IE5 browser just happens to be capable of
+displaying XML files in a rudimentary tree view format. You are also encouraged
+to view these XML documents using other XML editors. You might want to use
+Microsoft’s XML Notepad – a simple XML editor that can be downloaded for free
+from various sources.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>In this example you can compare the original XML file
+(data\Customer.XML) with the XML file created by this application
+(data\NewCustomer.Xml). The two files will be identical except the Customer.xml
+shows state names (e.g. California) and the NewCustomer.xml has been altered to
+show state codes (CA). Viewing these two just verifies that the application
+works.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>The customer XML document is not necessarily designed to
+represent the DataFlex customer data. In fact, this document has its origins
+outside of DataFlex. In this sample we never even open a data base file. If we
+wanted we could use the XML file to make changes in an existing data file or to
+use data from our files to update the XML document. These kinds of updates are
+managed by the code that your write.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Study and understand this sample before moving on to the
+others. It has all of the basics of XML manipulation. You:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo6;tab-stops:list .5in'>Create
+     and destroy nodes. </li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo6;tab-stops:list .5in'>You
+     create a Nodelist using a simple search pattern.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo6;tab-stops:list .5in'>You
+     alter XML nodes and place them back into the document.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo6;tab-stops:list .5in'>You
+     load and save XML documents.</li>
+</ol>
+
+</div>
+
+</body>
+
+</html>

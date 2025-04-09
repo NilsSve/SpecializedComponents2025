@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CUSTOMERLIST xmlns="http://www.dataaccess.com/Customer">
+	<CUSTOMER NAME="Ming Foo Bakery" PRODUCT="Food" ATMOSPHERE="Foggy!!" Rating="A">
+		<!--Ming has the best fortune cookies in the universe. Good food too!-->
+		<CONTACT NAME="Sifu Nick">
+			<TELEPHONE>415 555 1213</TELEPHONE>
+			<EMAIL>sifunick@mingfoobakery.com</EMAIL>
+		</CONTACT>
+		<WEBSITE>www.mingfoobakery.com</WEBSITE>
+		<ADDRESS>
+			<STREET>1199 Sutter St</STREET>
+			<CITY>San Francisco</CITY>
+			<STATE>California</STATE>
+			<ZIP>94020</ZIP>
+		</ADDRESS>
+		<SALES-REP>YYY</SALES-REP>
+		<TELEPHONE>415 555 1212</TELEPHONE>
+	</CUSTOMER>
+	<CUSTOMER NAME="Santa Maria Cafeteria" PRODUCT="Food" ATMOSPHERE="Salsa!!" Rating="A">
+		<CONTACT NAME="Tia Maria">
+			<TELEPHONE>305 555 1213</TELEPHONE>
+		</CONTACT>
+		<WEBSITE>www.santamariacafeteria.com</WEBSITE>
+		<ADDRESS>
+			<STREET>901 Tamiami Trail</STREET>
+			<CITY>Miami</CITY>
+                        <STATE>Florida</STATE>
+			<ZIP>33555</ZIP>
+		</ADDRESS>
+		<SALES-REP>ZZZ</SALES-REP>
+		<TELEPHONE>305 555 1212</TELEPHONE>
+	</CUSTOMER>
+	<!--Comment for customer 3-->
+	<CUSTOMER NAME="Joe's Garage Inc" PRODUCT="Grease" ATMOSPHERE="Demented!!" Rating="A">
+		<!--This is a very deranged customer. Try to avoid angering this customer.-->
+		<CONTACT NAME="BIG BOY PETE">
+			<EMAIL>greasy@joesgarageinc.com</EMAIL>
+			<FAX>555 555 1313</FAX>
+		</CONTACT>
+		<WEBSITE>www.joesgarageinc.com</WEBSITE>
+		<ADDRESS>
+			<STREET>900000 Sepulveda Blvd</STREET>
+			<CITY>Industry</CITY>
+                        <STATE>California</STATE>
+			<ZIP>92010</ZIP>
+		</ADDRESS>
+		<SALES-REP>XXX</SALES-REP>
+		<TELEPHONE>555 555 1212</TELEPHONE>
+	</CUSTOMER>
+</CUSTOMERLIST>
