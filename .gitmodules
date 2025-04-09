@@ -1,0 +1,4 @@
+[submodule "Libraries/Example Library"]
+	path = Libraries/Example Library
+	url = https://github.com/NilsSve/ExampleLibrary2025
+	branch = main
